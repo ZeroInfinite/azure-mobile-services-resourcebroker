@@ -48,7 +48,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
         /// Generates the resource.
         /// </summary>
         /// <returns>Returns the resource.</returns>
-        public override ResourceResponseToken CreateResourceToken()
+        public override ResourceToken CreateResourceToken()
         {
             return this.storageProvider.CreateTableAccessToken(this.tableParameters.Name, this.tableParameters.Permissions, this.tableParameters.Expiration);
         }

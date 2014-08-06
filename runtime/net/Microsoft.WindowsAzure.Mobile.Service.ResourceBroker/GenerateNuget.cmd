@@ -1,0 +1,1 @@
+..\..\..\tools\Nuget.exe pack Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.csproj -Prop Configuration=Release

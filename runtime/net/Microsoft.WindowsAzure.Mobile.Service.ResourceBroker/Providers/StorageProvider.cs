@@ -44,7 +44,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
         /// <param name="permissions">The permissions to apply to the blob.</param>
         /// <param name="expiration">The expiration time for the token.</param>
         /// <returns>Returns the blob's URI access string.</returns>
-        public ResourceResponseToken CreateBlobAccessToken(string containerName, string blobName, ResourcePermissions permissions, DateTime? expiration = null)
+        public ResourceToken CreateBlobAccessToken(string containerName, string blobName, ResourcePermissions permissions, DateTime? expiration = null)
         {
             if (string.IsNullOrWhiteSpace(containerName))
             {
@@ -69,7 +69,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
             string sasBlobToken = blob.GetSharedAccessSignature(sasConstraints);
 
             // Append this to the URI.
-            return new ResourceResponseToken { Uri = blob.Uri + sasBlobToken };
+            return new ResourceToken { Uri = blob.Uri + sasBlobToken };
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
         /// <param name="permissions">The permissions to apply to the table.</param>
         /// <param name="expiration">The expiration time for the token.</param>
         /// <returns>Returns the blob's URI access string.</returns>
-        public ResourceResponseToken CreateTableAccessToken(string tableName, ResourcePermissions permissions, DateTime? expiration = null)
+        public ResourceToken CreateTableAccessToken(string tableName, ResourcePermissions permissions, DateTime? expiration = null)
         {
             if (string.IsNullOrWhiteSpace(tableName))
             {
@@ -96,7 +96,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
             string sasTableToken = table.GetSharedAccessSignature(sasConstraints);
 
             // Append this to the URI.
-            return new ResourceResponseToken { Uri = table.Uri + sasTableToken };
+            return new ResourceToken { Uri = table.Uri + sasTableToken };
         }
 
         /// <summary>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=331327</licenseUrl>
+    <projectUrl>https://github.com/Azure/azure-mobile-services-resourcebroker</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288890</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This library allows you to easily generate scoped SAS tokens for resources such as Azure Storage.</description>
+    <copyright>&#169; Microsoft Corporation. All rights reserved</copyright>
+    <tags>microsoft windows azure mobile services backend</tags>
+  </metadata>
+</package>
