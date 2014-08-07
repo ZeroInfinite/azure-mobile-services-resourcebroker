@@ -63,7 +63,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -80,7 +80,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = expiration });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -96,7 +96,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -112,7 +112,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
 
             // Assert.
@@ -141,7 +141,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -156,7 +156,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -171,7 +171,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.ReadWrite, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -185,7 +185,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -199,7 +199,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -213,7 +213,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -228,7 +228,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -243,7 +243,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -258,7 +258,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -273,7 +273,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -288,7 +288,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -303,7 +303,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -318,7 +318,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -333,7 +333,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -348,7 +348,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -363,7 +363,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -378,7 +378,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -393,7 +393,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);

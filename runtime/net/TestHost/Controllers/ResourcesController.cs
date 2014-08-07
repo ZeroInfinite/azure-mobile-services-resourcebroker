@@ -1,0 +1,45 @@
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using Microsoft.WindowsAzure.Mobile.Service;
+using Microsoft.WindowsAzure.Mobile.Service.ResourceBroker;
+using Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers;
+using Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Models;
+using Microsoft.WindowsAzure.Mobile.Service.Security;
+using Newtonsoft.Json.Linq;
+
+namespace TestHost
+{
+    /// <summary>
+    /// Issues tokens and connection strings for various Azure resources.
+    /// </summary>
+    [AuthorizeLevel(AuthorizationLevel.User)]
+    public class ResourcesController : ApiController
+    {
+        private static ResourceRequestManager requestManager = new ResourceRequestManager();
+
+        /// <summary>
+        /// Generates a token or connection string based on the given configuration.
+        /// </summary>
+        /// <param name="type">The type of the resource to generate the token for.</param>
+        /// <param name="parameters">Optional token parameters.</param>
+        /// <returns>Returns the generated SAS token or connection string.</returns>
+        public ResourceToken Post(string type, [FromBody] JToken parameters)
+        {
+            return requestManager.GenerateToken(type, parameters, this.Services);
+        }
+
+        /// <summary>
+        /// The services property.
+        /// </summary>
+        public ApiServices Services
+        {
+            get;
+            set;
+        }
+    }
+}

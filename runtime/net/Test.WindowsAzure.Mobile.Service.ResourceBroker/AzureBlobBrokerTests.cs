@@ -87,7 +87,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -104,7 +104,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read, Expiration = expiration });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -120,7 +120,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -136,7 +136,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read });
 
             // Act.
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
 
             // Assert.
@@ -165,7 +165,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -180,7 +180,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -195,7 +195,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.ReadWrite, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -209,7 +209,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read | ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -223,7 +223,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
@@ -237,7 +237,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Act
-            ResourceResponseToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken();
 
             // Assert.
             Assert.IsNotNull(token);
