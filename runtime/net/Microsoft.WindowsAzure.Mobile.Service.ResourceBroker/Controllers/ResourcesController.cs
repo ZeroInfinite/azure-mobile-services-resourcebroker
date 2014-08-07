@@ -41,7 +41,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// <returns>Returns the generated SAS token or connection string.</returns>
         protected virtual ResourceToken GenerateToken(string type, JToken parameters)
         {
-            return this.requestManager.GenerateToken(type, parameters, this.Services);
+            return this.requestManager.GenerateToken(type, parameters, this.Services.Settings);
         }
 
         /// <summary>

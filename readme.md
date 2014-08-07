@@ -56,7 +56,7 @@ This allows you to perform request validation before issuing the token. Alternat
 
         public ResourceToken Post(string type, [FromBody] JToken parameters)
         {
-            return this.requestManager.GenerateToken(type, parameters);
+            return this.requestManager.GenerateToken(type, parameters, this.Services.Settings);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -51,9 +52,9 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// </summary>
         /// <param name="resourceType">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
-        /// <param name="services">The Web API ApiServices instance.</param>
+        /// <param name="settings">The app settings collection.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
-        public ResourceToken GenerateToken(string resourceType, JToken parameters, ApiServices services)
+        public ResourceToken GenerateToken(string resourceType, JToken parameters, IDictionary<string, string> settings)
         {
             if (string.IsNullOrWhiteSpace(resourceType))
             {
@@ -65,13 +66,13 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 throw new ArgumentNullException("parameters");
             }
 
-            if (services == null)
+            if (settings == null)
             {
-                throw new ArgumentNullException("services");
+                throw new ArgumentNullException("settings");
             }
 
             ResourceType mappedResourceType = this.MapResourceType(resourceType);
-            return this.GenerateToken(mappedResourceType, parameters, this.GetConnectionString(mappedResourceType, services));
+            return this.GenerateToken(mappedResourceType, parameters, this.GetConnectionString(mappedResourceType, settings));
         }
 
         /// <summary>
@@ -102,22 +103,22 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// </summary>
         /// <param name="resourceType">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
-        /// <param name="services">The Web API ApiServices instance.</param>
+        /// <param name="settings">The app settings collection.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
-        public ResourceToken GenerateToken(ResourceType resourceType, JToken parameters, ApiServices services)
+        public ResourceToken GenerateToken(ResourceType resourceType, JToken parameters, IDictionary<string, string> settings)
         {
             if (parameters == null)
             {
                 throw new ArgumentNullException("parameters");
             }
 
-            if (services == null)
+            if (settings == null)
             {
-                throw new ArgumentNullException("services");
+                throw new ArgumentNullException("settings");
             }
 
             ResourceParameters defaultParams = this.ExtractParameters(resourceType, parameters);
-            return this.GenerateToken(resourceType, defaultParams, this.GetConnectionString(resourceType, services));
+            return this.GenerateToken(resourceType, defaultParams, this.GetConnectionString(resourceType, settings));
         }
 
         /// <summary>
@@ -162,7 +163,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 throw new ArgumentNullException("services");
             }
 
-            AzureResourceBroker broker = AzureResourceBroker.Create(resourceType, this.GetConnectionString(resourceType, services), parameters);
+            AzureResourceBroker broker = AzureResourceBroker.Create(resourceType, this.GetConnectionString(resourceType, services.Settings), parameters);
             return broker.CreateResourceToken();
         }
 
@@ -170,43 +171,43 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// Gets a connection string for the given resource type, using the default app settings.
         /// </summary>
         /// <param name="resourceType">The type of the resource to get a connection string for.</param>
-        /// <param name="services">The Web API ApiServices instance.</param>
+        /// <param name="settings">The app settings collection.</param>
         /// <returns>The connection string.</returns>
-        public string GetConnectionString(string resourceType, ApiServices services)
+        public string GetConnectionString(string resourceType, IDictionary<string, string> settings)
         {
             if (string.IsNullOrWhiteSpace(resourceType))
             {
                 throw new ArgumentException("must be a valid type string", "resourceType");
             }
 
-            return this.GetConnectionString(this.MapResourceType(resourceType), services);
+            return this.GetConnectionString(this.MapResourceType(resourceType), settings);
         }
 
         /// <summary>
         /// Gets a connection string for the given resource type, using the default app settings.
         /// </summary>
         /// <param name="resourceType">The type of the resource to get a connection string for.</param>
-        /// <param name="services">The Web API ApiServices instance.</param>
+        /// <param name="settings">The app settings collection.</param>
         /// <returns>The connection string.</returns>
-        public string GetConnectionString(ResourceType resourceType, ApiServices services)
+        public string GetConnectionString(ResourceType resourceType, IDictionary<string, string> settings)
         {
-            if (services == null)
+            if (settings == null)
             {
-                throw new ArgumentNullException("services");
+                throw new ArgumentNullException("settings");
             }
 
             switch (resourceType)
             {
                 case ResourceType.Blob:
                 case ResourceType.Table:
-                    return this.GetStorageConnectionString(resourceType, services);
+                    return this.GetStorageConnectionString(resourceType, settings);
 
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        private string GetStorageConnectionString(ResourceType resourceType, ApiServices services)
+        private string GetStorageConnectionString(ResourceType resourceType, IDictionary<string, string> settings)
         {
             const string GenericStorageParameterName = "ResourceBrokerStorageConnectionString";
             const string BlobStorageParameterName = "ResourceBrokerBlobConnectionString";
@@ -219,11 +220,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 resourceSpecificParameterName = TableStorageParameterName;
             }
 
-            string connectionString = services.Settings[resourceSpecificParameterName];
+            string connectionString = settings[resourceSpecificParameterName];
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                connectionString = services.Settings[GenericStorageParameterName];
+                connectionString = settings[GenericStorageParameterName];
             }
 
             if (string.IsNullOrWhiteSpace(connectionString))
