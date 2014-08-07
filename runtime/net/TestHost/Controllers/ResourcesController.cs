@@ -20,7 +20,7 @@ namespace TestHost
     [AuthorizeLevel(AuthorizationLevel.User)]
     public class ResourcesController : ApiController
     {
-        private static ResourceRequestManager requestManager = new ResourceRequestManager();
+        private ResourceRequestManager requestManager = new ResourceRequestManager();
 
         /// <summary>
         /// Generates a token or connection string based on the given configuration.
@@ -30,7 +30,7 @@ namespace TestHost
         /// <returns>Returns the generated SAS token or connection string.</returns>
         public ResourceToken Post(string type, [FromBody] JToken parameters)
         {
-            return requestManager.GenerateToken(type, parameters, this.Services);
+            return this.requestManager.GenerateToken(type, parameters, this.Services);
         }
 
         /// <summary>
