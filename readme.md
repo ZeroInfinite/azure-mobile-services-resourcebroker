@@ -9,6 +9,28 @@ The ResourceBroker consists of several components:
 * Front-end extensions for managed, iOS, and Android clients (client support coming soon!)
 
 # Back-End #
+## Node ##
+To expose a ResourceBroker api from your node Mobile Services back-end, perform the following steps:
+
+### Installation ###
+Clone your Mobile Service repository and install the npm module in the 'service' folder
+
+    $ npm install mobileservice-resourcebroker
+    
+### Get Started ###
+
+Create a new custom api on your Mobile Service called resources from azure cli like so:
+```js
+azure mobile api create yourservice resources
+```
+In your Mobile Service repository update the resources.js script with the snippet as follows:
+```js
+exports.register = function (api) {
+	var config = require('mobileservice-config');
+	var options = { config: config.appSettings };
+    require('mobileservice-resourcebroker').Resources.register(api, options);
+};
+```
 
 ## .NET ##
 To expose a ResourceBroker controller from your .NET Mobile Services back-end, perform the following steps:

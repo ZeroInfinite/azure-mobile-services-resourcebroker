@@ -19,3 +19,4 @@ App_Data/
 packages/
 TestResults/
 PerfLogs/
+node_modules
