@@ -1,0 +1,45 @@
+{
+  "name": "mobileservice-resourcebroker",
+  "author": "Microsoft Corporation",
+  "version": "0.0.1",
+  "description": "A resource broker for Azure Mobile Services",
+  "tags": [
+    "azure",
+    "webapi"
+  ],
+  "keywords": [
+    "azure",
+    "webapi"
+  ],
+  "main": "./lib/index.js",
+  "engines": {
+    "node": ">= 0.8"
+  },
+  "licenses": [
+    {
+      "type": "Apache",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "dependencies": {
+    "azure-storage": "~0.3.2"
+  },
+  "homepage": "https://github.com/Azure/azure-mobile-services-resourcebroker",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Azure/azure-mobile-services-resourcebroker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Azure/azure-mobile-services-resourcebroker/issues"
+  },
+  "scripts": {
+    "test": "npm -s run-script jshint && npm -s run-script unit",
+    "jshint": "jshint lib",
+    "unit": "jasmine-node test"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.14.3",
+    "jshint": "~2.5.1",
+    "proxyquire": "~1.0.0"
+  }
+}
