@@ -1,7 +1,7 @@
 {
   "name": "mobileservice-resourcebroker",
   "author": "Microsoft Corporation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A resource broker for Azure Mobile Services",
   "tags": [
     "azure",

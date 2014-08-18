@@ -2,25 +2,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ----------------------------------------------------------------------------
 
-var Parameters = require('./parameters'),
-	BlobRequest = require('./blobrequest'),
+var BlobRequest = require('./blobrequest'),
+	Parameters = require('./parameters'),
+	Permissions = require('./permissions'),	
+	StorageUtils = require('./storageutils'),
 	azure = require('azure-storage');
 
 var BlobProvider = (function() {
+
     function BlobProvider(config) {				
-		this.account = {
-			name: config.ResourceBrokerBlobStorageAccountName || config.ResourceBrokerStorageAccountName,
-			key: config.ResourceBrokerBlobStorageAccountKey || config.ResourceBrokerStorageAccountKey
-		};
-		
-		if (!this.account.name) {
-			throw new Error('Either the ResourceBrokerBlobStorageAccountName or ResourceBrokerStorageAccountName setting must be defined');
-		}
-		
-		if (!this.account.key) {
-			throw new Error('Either the ResourceBrokerBlobStorageAccountKey or ResourceBrokerStorageAccountKey setting must be defined');
-		}
-		
+		this.account = StorageUtils.readStorageAccount('blob', config);		
+		this.allowedPermisions = StorageUtils.readPermissions('blob', config);		
 		this.type = 'blob';
     }
 	
@@ -36,10 +28,10 @@ var BlobProvider = (function() {
 		params.container = data.container;		
 		
 		var permissions = '';
-		if(params.permissions.read) {
+		if(params.permissions.read && this.allowedPermisions.read) {
 			permissions = azure.BlobUtilities.SharedAccessPermissions.READ;
 		} 
-		if (params.permissions.write) {
+		if (params.permissions.write && this.allowedPermisions.write) {
 			permissions += azure.BlobUtilities.SharedAccessPermissions.WRITE;
 		}		
 		params.permissions = permissions;

@@ -11,17 +11,7 @@ var Parameters = (function() {
 	Parameters.parse = function(data) {
 		validateInputs(data);		
 		
-		var permissions = new Permissions();
-		
-		if(data.permissions == 'r') {
-			permissions.read = true;
-		}
-		else if (data.permissions == 'w') {
-			permissions.write = true;
-		}
-		else if (data.permissions == 'rw' || data.permissions == 'wr') {
-			permissions.readWrite = true;
-		}
+		var permissions = Permissions.parse(data.permissions);
 		
 		var params = {
 			name: data.name,

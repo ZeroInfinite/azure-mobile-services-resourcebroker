@@ -39,6 +39,22 @@ var Permissions = (function() {
 			set: function(value) { this.read = this.write = !!value; }
 		});
     }	
+	
+	Permissions.parse = function(value) {
+		var permissions = new Permissions();
+		
+		if(value == 'r') {
+			permissions.read = true;
+		}
+		else if (value == 'w') {
+			permissions.write = true;
+		}
+		else if (value == 'rw' || value == 'wr') {
+			permissions.readWrite = true;
+		}
+		
+		return permissions;
+	};
 
     return Permissions;
 })();

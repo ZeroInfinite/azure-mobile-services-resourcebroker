@@ -2,7 +2,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // ----------------------------------------------------------------------------
 
-var azure = require('azure-storage');
+var azure = require('azure-storage'),
+	StorageUtils = require('./storageutils');
 	
 var TableRequest = (function() {
 	function TableRequest(account, params) {
@@ -14,7 +15,7 @@ var TableRequest = (function() {
 		var sharedAccessPolicy = {
 			AccessPolicy: { 
 				Permissions: this.params.permissions, 
-				Expiry: formatDate(this.params.expiry)
+				Expiry: StorageUtils.formatDate(this.params.expiry)
 			}
 		};	
 			
@@ -31,13 +32,7 @@ var TableRequest = (function() {
 
 		// Full path for resource with SAS
 		return  'https://' + this.params.host + relativePath + '?' + sasQueryString;
-	}; 
-	
-	function formatDate(date) { 
-		var raw = date.toJSON(); 
-		// storage service does not like milliseconds on the end of the time so strip 
-		return raw.substr(0, raw.lastIndexOf('.')) + 'Z'; 
-	}
+	}; 	
 
 	return TableRequest;
 })();

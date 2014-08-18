@@ -31,6 +31,18 @@ exports.register = function (api) {
     require('mobileservice-resourcebroker').Resources.register(api, options);
 };
 ```
+In your Mobile Service configuration settings you need to set the following settings:
+
+#### Blob storage ####
+* _ResourceBrokerBlobStoragePermissions_: This sets the permissions that client can ask for blob storage. Possible values are 'r', 'rw', or 'w' for read, read-write and write respectively.
+* _ResourceBrokerBlobStorageAccountName_: The name of storage account to use for blob storage.
+* _ResourceBrokerBlobStorageAccountKey_: The key of storage account to use for blob storage.
+#### Table storage ####
+* _ResourceBrokerTableStoragePermissions_: This sets the permissions that client can ask for table storage. Possible values are 'r', 'rw' or 'w' for read, read-write and write respectively.
+* _ResourceBrokerTableStorageAccountName_: The name of storage account to use for table storage.
+* _ResourceBrokerTableStorageAccountKey_: The key of storage account to use for table storage.
+
+Note: If you want to share same storage account for both blob and table, you can use ResourceBrokerStorageAccountName and ResourceBrokerStorageAccountKey settings instead.
 
 ## .NET ##
 To expose a ResourceBroker controller from your .NET Mobile Services back-end, perform the following steps:
