@@ -37,6 +37,7 @@ In your Mobile Service configuration settings you need to set the following sett
 * _ResourceBrokerBlobStoragePermissions_: This sets the permissions that client can ask for blob storage. Possible values are 'r', 'rw', or 'w' for read, read-write and write respectively.
 * _ResourceBrokerBlobStorageAccountName_: The name of storage account to use for blob storage.
 * _ResourceBrokerBlobStorageAccountKey_: The key of storage account to use for blob storage.
+
 #### Table storage ####
 * _ResourceBrokerTableStoragePermissions_: This sets the permissions that client can ask for table storage. Possible values are 'r', 'rw' or 'w' for read, read-write and write respectively.
 * _ResourceBrokerTableStorageAccountName_: The name of storage account to use for table storage.
