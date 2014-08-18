@@ -35,7 +35,7 @@ var StorageUtils = (function() {
 		}
 		
 		return account;
-	}
+	};
 		
 	StorageUtils.formatDate = function(date) { 
 		var raw = date.toJSON(); 
