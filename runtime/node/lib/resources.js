@@ -26,7 +26,7 @@ exports.register = function (api, options) {
 	api.post('/:type', function(req, res) {
 		var resReq = broker.parseRequest(req.params.type, req.body);
 		if (typeof options.callback === 'function') {
-			options.callback(resReq, function(err) {
+			options.callback(resReq, req.user, function(err) {
 				if (err) {
 					res.send(400, err);
 					return;
