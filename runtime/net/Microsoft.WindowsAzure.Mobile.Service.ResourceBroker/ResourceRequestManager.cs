@@ -94,7 +94,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 throw new ArgumentException("must be a valid connection string", "connectionString");
             }
 
-            ResourceParameters defaultParams = this.ExtractParameters(resourceType, parameters);
+            ResourceParameters defaultParams = this.ParseTokenParameters(resourceType, parameters);
             return this.GenerateToken(resourceType, defaultParams, connectionString);
         }
 
@@ -117,7 +117,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 throw new ArgumentNullException("settings");
             }
 
-            ResourceParameters defaultParams = this.ExtractParameters(resourceType, parameters);
+            ResourceParameters defaultParams = this.ParseTokenParameters(resourceType, parameters);
             return this.GenerateToken(resourceType, defaultParams, this.GetConnectionString(resourceType, settings));
         }
 
@@ -149,21 +149,21 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// </summary>
         /// <param name="resourceType">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
-        /// <param name="services">The Web API ApiServices instance.</param>
+        /// <param name="appSettings">The app settings collection.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
-        public ResourceToken GenerateToken(ResourceType resourceType, ResourceParameters parameters, ApiServices services)
+        public ResourceToken GenerateToken(ResourceType resourceType, ResourceParameters parameters, IDictionary<string, string> appSettings)
         {
             if (parameters == null)
             {
                 throw new ArgumentNullException("parameters");
             }
 
-            if (services == null)
+            if (appSettings == null)
             {
                 throw new ArgumentNullException("services");
             }
 
-            AzureResourceBroker broker = AzureResourceBroker.Create(resourceType, this.GetConnectionString(resourceType, services.Settings), parameters);
+            AzureResourceBroker broker = AzureResourceBroker.Create(resourceType, this.GetConnectionString(resourceType, appSettings), parameters);
             return broker.CreateResourceToken();
         }
 
@@ -207,6 +207,45 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
             }
         }
 
+        /// <summary>
+        /// Converts the Json token parameters into a strongly-typed object.
+        /// </summary>
+        /// <param name="resourceType">The resource type parameter.</param>
+        /// <param name="parameters">The JSON parameters.</param>
+        /// <returns>Returns the strongly-typed parameters.</returns>
+        public ResourceParameters ParseTokenParameters(string resourceType, JToken parameters)
+        {
+            if (string.IsNullOrWhiteSpace(resourceType))
+            {
+                throw new ArgumentNullException("resourceType");
+            }
+
+            return this.ParseTokenParameters(this.MapResourceType(resourceType), parameters);
+        }
+
+        /// <summary>
+        /// Converts the Json token parameters into a strongly-typed object.
+        /// </summary>
+        /// <param name="resourceType">The resource type parameter.</param>
+        /// <param name="parameters">The JSON parameters.</param>
+        /// <returns>Returns the strongly-typed parameters.</returns>
+        public ResourceParameters ParseTokenParameters(ResourceType resourceType, JToken parameters)
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException("parameters");
+            }
+
+            if (resourceType == ResourceType.Blob)
+            {
+                return this.ExtractBlobParameters(parameters);
+            }
+            else
+            {
+                return this.ExtractDefaultParameters(parameters);
+            }
+        }
+
         private string GetStorageConnectionString(ResourceType resourceType, IDictionary<string, string> settings)
         {
             const string GenericStorageParameterName = "ResourceBrokerStorageConnectionString";
@@ -220,11 +259,12 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 resourceSpecificParameterName = TableStorageParameterName;
             }
 
-            string connectionString = settings[resourceSpecificParameterName];
+            string connectionString = null;
+            settings.TryGetValue(resourceSpecificParameterName, out connectionString);
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                connectionString = settings[GenericStorageParameterName];
+                settings.TryGetValue(GenericStorageParameterName, out connectionString);
             }
 
             if (string.IsNullOrWhiteSpace(connectionString))
@@ -247,18 +287,6 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
             }
 
             throw new HttpResponseException(HttpStatusCode.BadRequest);
-        }
-
-        private ResourceParameters ExtractParameters(ResourceType resourceType, JToken parameters)
-        {
-            if (resourceType == ResourceType.Blob)
-            {
-                return this.ExtractBlobParameters(parameters);
-            }
-            else
-            {
-                return this.ExtractDefaultParameters(parameters);
-            }
         }
 
         private BlobParameters ExtractBlobParameters(JToken parameters)
