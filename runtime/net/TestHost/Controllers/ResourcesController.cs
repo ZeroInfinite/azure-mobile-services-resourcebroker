@@ -18,7 +18,7 @@ namespace TestHost
     /// Issues tokens and connection strings for various Azure resources.
     /// </summary>
     [AuthorizeLevel(AuthorizationLevel.User)]
-    public class MyResourcesController : ResourcesController
+    public class ResourcesController : ResourcesControllerBase
     {
     }
 }

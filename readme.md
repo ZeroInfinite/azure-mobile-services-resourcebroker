@@ -9,7 +9,7 @@ The ResourceBroker consists of several components:
 * Front-end extensions for managed, iOS, and Android clients (client support coming soon!)
 
 # Back-End #
-## Node ##
+## Node.js Back-End ##
 To expose a ResourceBroker api from your node Mobile Services back-end, perform the following steps:
 
 ### Installation ###
@@ -45,7 +45,7 @@ In your Mobile Service configuration settings you need to set the following sett
 
 Note: If you want to share same storage account for both blob and table, you can use ResourceBrokerStorageAccountName and ResourceBrokerStorageAccountKey settings instead.
 
-## .NET ##
+## .NET Back-End ##
 To expose a ResourceBroker controller from your .NET Mobile Services back-end, perform the following steps:
 
 ### Storage ###
@@ -58,10 +58,10 @@ Navigate to your Mobile Service in the Azure portal, and flip to the Configure t
 
 ### Code ###
 
-First, import the ResourceBroker Nuget package into your Mobile Services back-end project. Next, create a new controller and derive it from the ResourceBroker class:
+First, import the ResourceBroker Nuget package into your Mobile Services back-end project. Next, create a new controller and derive it from the ResourceBrokerBase class:
     
     [AuthorizeLevel(AuthorizationLevel.User)]
-    public class MyResourcesController : ResourcesController
+    public class ResourcesController : ResourcesControllerBase
     {
     }
 

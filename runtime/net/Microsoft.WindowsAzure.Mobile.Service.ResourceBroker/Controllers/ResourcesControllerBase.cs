@@ -17,7 +17,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
     /// Issues tokens and connection strings for various Azure resources.
     /// </summary>
     [AuthorizeLevel(AuthorizationLevel.User)]
-    public abstract class ResourcesController : ApiController
+    public abstract class ResourcesControllerBase : ApiController
     {
         private ResourceRequestManager requestManager = new ResourceRequestManager();
 
