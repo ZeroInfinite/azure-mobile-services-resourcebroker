@@ -17,9 +17,13 @@ namespace TestHost
             // Use this class to set WebAPI configuration options
             HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
 
-            config.Routes.MapHttpRoute(
-                name: "Resources",
-                routeTemplate: "api/resources/{type}");
+            // Insert the ResourcesController route at the top to avoid conflicting with predefined routes.
+            var resourcesRoute = config.Routes.CreateRoute(
+                routeTemplate: "api/resources/{type}",
+                defaults: new { controller = "resources" },
+                constraints: null);
+
+            config.Routes.Insert(0, "Resources", resourcesRoute);
 
             // To display errors in the browser during development, uncomment the following
             // line. Comment it out again when you deploy your service for production use.

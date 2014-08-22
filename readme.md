@@ -66,6 +66,17 @@ First, import the ResourceBroker Nuget package into your Mobile Services back-en
     {
     }
 
+Finally, add a custom route to map to this controller. Insert this code within the Register method of your WebApiConfig file:
+
+    // Create a custom route mapping the resource type into the URI.     
+    var resourcesRoute = config.Routes.CreateRoute(
+         routeTemplate: "api/resources/{type}",
+         defaults: new { controller = "resources" },
+         constraints: null);
+
+     // Insert the ResourcesController route at the top of the collection to avoid conflicting with predefined routes. 
+     config.Routes.Insert(0, "Resources", resourcesRoute);
+
 ### Done! ###
 
 Now your Mobile Services back-end is ready to issue signed, scoped access tokens for blob and table storage. 
