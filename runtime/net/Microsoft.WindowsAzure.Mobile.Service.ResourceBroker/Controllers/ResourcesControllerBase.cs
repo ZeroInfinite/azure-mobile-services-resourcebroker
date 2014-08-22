@@ -34,7 +34,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// <param name="type">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
-        public ResourceToken Post(string type, [FromBody] JToken parameters)
+        public ResourceToken Post(string type, JToken parameters)
         {
             return this.GenerateToken(type, parameters);
         }

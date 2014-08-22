@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHost", "TestHost\TestHost.csproj", "{209FA716-A7AD-4095-BD70-C8710FC66FA7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.WindowsAzure.Mobile.Service.ResourceBroker", "Microsoft.WindowsAzure.Mobile.Service.ResourceBroker\Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.csproj", "{6DF49521-6097-4105-B65A-F4A1956DCD67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.WindowsAzure.Mobile.Service.ResourceBroker", "Test.WindowsAzure.Mobile.Service.ResourceBroker\Test.WindowsAzure.Mobile.Service.ResourceBroker.csproj", "{3F2994B4-4FCE-484E-A7ED-C744BC506CD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHost", "TestHost\TestHost.csproj", "{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,16 +21,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|ARM.ActiveCfg = Release|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|x64.ActiveCfg = Release|Any CPU
-		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|x86.ActiveCfg = Release|Any CPU
 		{6DF49521-6097-4105-B65A-F4A1956DCD67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DF49521-6097-4105-B65A-F4A1956DCD67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DF49521-6097-4105-B65A-F4A1956DCD67}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -51,6 +41,16 @@ Global
 		{3F2994B4-4FCE-484E-A7ED-C744BC506CD1}.Release|ARM.ActiveCfg = Release|Any CPU
 		{3F2994B4-4FCE-484E-A7ED-C744BC506CD1}.Release|x64.ActiveCfg = Release|Any CPU
 		{3F2994B4-4FCE-484E-A7ED-C744BC506CD1}.Release|x86.ActiveCfg = Release|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Release|x64.ActiveCfg = Release|Any CPU
+		{C31DD2D0-53CC-40E6-9E7B-D86D0241E767}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

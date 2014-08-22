@@ -141,6 +141,6 @@ The following example shows the body payload requesting an access token for a bl
     {
 	    "name": "myblob",
 	    "container": "mycontainer",
-	    "permissions": "w"
+	    "permissions": "w",
         "expiry": "2015-12-01T07:34:42-5:00Z"
 	}
