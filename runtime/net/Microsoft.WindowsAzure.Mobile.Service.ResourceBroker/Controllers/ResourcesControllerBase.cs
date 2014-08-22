@@ -22,6 +22,13 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         private ResourceRequestManager requestManager = new ResourceRequestManager();
 
         /// <summary>
+        /// A generic Get method.
+        /// </summary>
+        public void Get()
+        {
+        }
+
+        /// <summary>
         /// Generates a token or connection string based on the given configuration.
         /// </summary>
         /// <param name="type">The type of the resource to generate the token for.</param>
