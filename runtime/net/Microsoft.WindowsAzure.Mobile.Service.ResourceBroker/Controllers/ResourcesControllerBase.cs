@@ -22,6 +22,26 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         private ResourceRequestManager requestManager = new ResourceRequestManager();
 
         /// <summary>
+        /// The services property.
+        /// </summary>
+        public ApiServices Services
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the request manager helper instance.
+        /// </summary>
+        protected ResourceRequestManager RequestManager
+        {
+            get
+            {
+                return this.requestManager;
+            }
+        }
+
+        /// <summary>
         /// A generic Get method.
         /// </summary>
         public void Get()
@@ -48,26 +68,6 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         protected virtual ResourceToken GenerateToken(string type, JToken parameters)
         {
             return this.requestManager.GenerateToken(type, parameters, this.Services.Settings);
-        }
-
-        /// <summary>
-        /// The services property.
-        /// </summary>
-        public ApiServices Services
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets the request manager helper instance.
-        /// </summary>
-        protected ResourceRequestManager RequestManager
-        {
-            get
-            {
-                return this.requestManager;
-            }
         }
     }
 }

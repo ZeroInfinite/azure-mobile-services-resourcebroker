@@ -23,7 +23,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Blob_Create_WithEmptyConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureBlobBroker("", new BlobParameters { Name = "blob", Container = "container" }));
+            this.ExpectException<ArgumentException>(() => new AzureBlobBroker(string.Empty, new BlobParameters { Name = "blob", Container = "container" }));
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Blob_Create_WithEmptyContainerName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "" }));
+            this.ExpectException<ArgumentException>(() => new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = string.Empty }));
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Blob_Create_WithEmptyBlobName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "", Container = "container" }));
+            this.ExpectException<ArgumentException>(() => new AzureBlobBroker(ConnectionString, new BlobParameters { Name = string.Empty, Container = "container" }));
         }
 
         [TestMethod]
@@ -137,7 +137,6 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
 
             // Act.
             ResourceToken token = broker.CreateResourceToken();
-
 
             // Assert.
             Assert.IsNotNull(token);
@@ -364,6 +363,5 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             // Act
             this.ExpectHttpResponseException(HttpStatusCode.BadRequest, () => broker.CreateResourceToken());
         }
-
     }
 }

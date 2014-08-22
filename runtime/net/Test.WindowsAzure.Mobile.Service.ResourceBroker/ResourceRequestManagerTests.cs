@@ -30,7 +30,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void ResourceRequestManager_GenerateToken_WithEmptyResourceType_ThrowsArgumentException()
         {
             ResourceRequestManager m = new ResourceRequestManager();
-            this.ExpectException<ArgumentException>(() => m.GenerateToken("", this.GenerateTableJson(), ConnectionString));
+            this.ExpectException<ArgumentException>(() => m.GenerateToken(string.Empty, this.GenerateTableJson(), ConnectionString));
         }
 
         [TestMethod]
@@ -86,21 +86,21 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void ResourceRequestManager_GenerateToken_WithEmptyConnectionString_ThrowsArgumentException()
         {
             ResourceRequestManager m = new ResourceRequestManager();
-            this.ExpectException<ArgumentException>(() => m.GenerateToken("table", this.GenerateTableJson(), ""));
+            this.ExpectException<ArgumentException>(() => m.GenerateToken("table", this.GenerateTableJson(), string.Empty));
         }
 
         [TestMethod]
         public void ResourceRequestManager_GenerateToken_WithEmptyConnectionString_ThrowsArgumentException2()
         {
             ResourceRequestManager m = new ResourceRequestManager();
-            this.ExpectException<ArgumentException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableJson(), ""));
+            this.ExpectException<ArgumentException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableJson(), string.Empty));
         }
 
         [TestMethod]
         public void ResourceRequestManager_GenerateToken_WithEmptyConnectionString_ThrowsArgumentException3()
         {
             ResourceRequestManager m = new ResourceRequestManager();
-            this.ExpectException<ArgumentException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableParameters(), ""));
+            this.ExpectException<ArgumentException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableParameters(), string.Empty));
         }
 
         [TestMethod]
@@ -593,7 +593,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             ResourceRequestManager m = new ResourceRequestManager();
             Dictionary<string, string> appSettings = new Dictionary<string, string>();
             appSettings.Add("ResourceBrokerStorageConnectionString", null);
-            this.ExpectException<ArgumentException>(() => m.GetConnectionString("", appSettings));
+            this.ExpectException<ArgumentException>(() => m.GetConnectionString(string.Empty, appSettings));
         }
 
         [TestMethod]
@@ -867,7 +867,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void ResourceRequestManager_ParseTokenParameters_WithEmptyResourceType_ThrowsArgumentException()
         {
             ResourceRequestManager m = new ResourceRequestManager();
-            this.ExpectException<ArgumentException>(() => m.ParseTokenParameters("", this.GenerateTableJson()));
+            this.ExpectException<ArgumentException>(() => m.ParseTokenParameters(string.Empty, this.GenerateTableJson()));
         }
 
         [TestMethod]
@@ -896,8 +896,8 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             ResourceRequestManager m = new ResourceRequestManager();
-            JToken parameters = GenerateTableJson();
-            parameters["name"] = "";
+            JToken parameters = this.GenerateTableJson();
+            parameters["name"] = string.Empty;
 
             // Act
             this.ExpectException<HttpResponseException>(() => m.ParseTokenParameters("table", parameters));
@@ -908,8 +908,8 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             ResourceRequestManager m = new ResourceRequestManager();
-            JToken parameters = GenerateTableJson();
-            parameters["permissions"] = "";
+            JToken parameters = this.GenerateTableJson();
+            parameters["permissions"] = string.Empty;
 
             // Act
             this.ExpectException<HttpResponseException>(() => m.ParseTokenParameters("table", parameters));
@@ -920,7 +920,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             ResourceRequestManager m = new ResourceRequestManager();
-            JToken parameters = GenerateTableJson();
+            JToken parameters = this.GenerateTableJson();
             parameters["permissions"] = "asdfadsf";
 
             // Act
@@ -932,8 +932,8 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             ResourceRequestManager m = new ResourceRequestManager();
-            JToken parameters = GenerateTableJson();
-            parameters["expiry"] = "";
+            JToken parameters = this.GenerateTableJson();
+            parameters["expiry"] = string.Empty;
 
             // Act
             this.ExpectException<HttpResponseException>(() => m.ParseTokenParameters("table", parameters));
@@ -944,7 +944,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             ResourceRequestManager m = new ResourceRequestManager();
-            JToken parameters = GenerateTableJson();
+            JToken parameters = this.GenerateTableJson();
             parameters["expiry"] = "asfasdf";
 
             // Act

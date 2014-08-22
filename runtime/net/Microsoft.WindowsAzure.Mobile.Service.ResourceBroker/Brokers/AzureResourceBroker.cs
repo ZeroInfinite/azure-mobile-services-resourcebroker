@@ -24,13 +24,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
             }
 
             this.Parameters = parameters;
-
         }
 
         /// <summary>
         /// Gets the optional parameters.
         /// </summary>
-
         public ResourceParameters Parameters
         {
             get;

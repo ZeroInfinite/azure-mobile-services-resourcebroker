@@ -23,7 +23,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Table_Create_WithEmptyConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker("", new ResourceParameters { Name = "table" }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker(string.Empty, new ResourceParameters { Name = "table" }));
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Table_Create_WithEmptyTableName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "" }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker(ConnectionString, new ResourceParameters { Name = string.Empty }));
         }
 
         [TestMethod]
@@ -113,7 +113,6 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
 
             // Act.
             ResourceToken token = broker.CreateResourceToken();
-
 
             // Assert.
             Assert.IsNotNull(token);

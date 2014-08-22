@@ -37,6 +37,38 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
         }
 
         /// <summary>
+        /// Gets the blob client.
+        /// </summary>
+        private CloudBlobClient BlobClient
+        {
+            get
+            {
+                if (this.blobClient == null)
+                {
+                    this.blobClient = this.storageAccount.CreateCloudBlobClient();
+                }
+
+                return this.blobClient;
+            }
+        }
+
+        /// <summary>
+        /// Gets the table client.
+        /// </summary>
+        public CloudTableClient TableClient
+        {
+            get
+            {
+                if (this.tableClient == null)
+                {
+                    this.tableClient = this.storageAccount.CreateCloudTableClient();
+                }
+
+                return this.tableClient;
+            }
+        }
+
+        /// <summary>
         /// Creates a SAS key for a blob with the given name, permissions, and expiration.
         /// </summary>
         /// <param name="containerName">The name of the container to create the blob within.</param>
@@ -184,38 +216,6 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
             }
 
             return sasConstraints;
-        }
-
-        /// <summary>
-        /// Gets the blob client.
-        /// </summary>
-        private CloudBlobClient BlobClient
-        {
-            get
-            {
-                if (this.blobClient == null)
-                {
-                    this.blobClient = this.storageAccount.CreateCloudBlobClient();
-                }
-
-                return this.blobClient;
-            }
-        }
-
-        /// <summary>
-        /// Gets the table client.
-        /// </summary>
-        public CloudTableClient TableClient
-        {
-            get
-            {
-                if (this.tableClient == null)
-                {
-                    this.tableClient = this.storageAccount.CreateCloudTableClient();
-                }
-
-                return this.tableClient;
-            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// </summary>
         /// <param name="resourceType">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
-        /// <param name="connectionString">The fully priviledged connection string to the resource.</param>
+        /// <param name="connectionString">The fully privileged connection string to the resource.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
         public ResourceToken GenerateToken(string resourceType, JToken parameters, string connectionString)
         {
@@ -80,7 +80,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// </summary>
         /// <param name="resourceType">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
-        /// <param name="connectionString">The fully priviledged connection string to the resource.</param>
+        /// <param name="connectionString">The fully privileged connection string to the resource.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
         public ResourceToken GenerateToken(ResourceType resourceType, JToken parameters, string connectionString)
         {
@@ -126,7 +126,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// </summary>
         /// <param name="resourceType">The type of the resource to generate the token for.</param>
         /// <param name="parameters">Token parameters.</param>
-        /// <param name="connectionString">The fully priviledged connection string to the resource.</param>
+        /// <param name="connectionString">The fully privileged connection string to the resource.</param>
         /// <returns>Returns the generated SAS token or connection string.</returns>
         public ResourceToken GenerateToken(ResourceType resourceType, ResourceParameters parameters, string connectionString)
         {

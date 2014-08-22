@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Web.Http;
-using MobileService1.DataObjects;
-using MobileService1.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 
-namespace MobileService1
+namespace TestHost
 {
     public static class WebApiConfig
     {
@@ -26,28 +24,6 @@ namespace MobileService1
             // To display errors in the browser during development, uncomment the following
             // line. Comment it out again when you deploy your service for production use.
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
-
-            Database.SetInitializer(new MobileService1Initializer());
-        }
-    }
-
-    public class MobileService1Initializer : DropCreateDatabaseIfModelChanges<MobileService1Context>
-    {
-        protected override void Seed(MobileService1Context context)
-        {
-            List<TodoItem> todoItems = new List<TodoItem>
-            {
-                new TodoItem { Id = "1", Text = "First item", Complete = false },
-                new TodoItem { Id = "2", Text = "Second item", Complete = false },
-            };
-
-            foreach (TodoItem todoItem in todoItems)
-            {
-                context.Set<TodoItem>().Add(todoItem);
-            }
-
-            base.Seed(context);
         }
     }
 }
-
