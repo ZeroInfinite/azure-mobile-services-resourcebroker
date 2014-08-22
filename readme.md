@@ -60,6 +60,7 @@ Navigate to your Mobile Service in the Azure portal, and flip to the Configure t
 
 First, import the ResourceBroker Nuget package into your Mobile Services back-end project. Next, create a new controller and derive it from the ResourceBrokerBase class:
     
+    // Setting the authorization level to User ensures that only authenticated users can request resource tokens.
     [AuthorizeLevel(AuthorizationLevel.User)]
     public class ResourcesController : ResourcesControllerBase
     {
@@ -135,11 +136,11 @@ The body of the POST request must contain a JSON payload containing the detail o
 
 #### Example ####
 
-The following example shows the body payload requesting an access token for a blob named 'myblob', within the container 'mycontainer', with write-only access, expiring on December 12, 2015.
+The following example shows the body payload requesting an access token for a blob named "myblob", within the container "mycontainer", with write-only access, expiring on December 1, 2015.
 
     {
-	    'name': 'myblob',
-	    'container': mycontainer',
-	    'permissions': 'w'
-        'expiry': '2015-12-01T07:34:42-5:00'
+	    "name": "myblob",
+	    "container": "mycontainer",
+	    "permissions": "w"
+        "expiry": "2015-12-01T07:34:42-5:00Z"
 	}

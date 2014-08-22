@@ -9,10 +9,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Models
     /// <summary>
     /// The possible resource access permissions.
     /// </summary>
+    [Flags]
     public enum ResourcePermissions
     {
         /// <summary>
-        /// Read access only.
+        /// No access.
         /// </summary>
         None = 0,
 

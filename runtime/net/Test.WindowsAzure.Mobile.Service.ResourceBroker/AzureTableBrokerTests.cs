@@ -76,7 +76,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithExpirationDate_ReturnsCorrectExpirationDate()
         {
             // Setup
-            DateTime expiration = new DateTime(2199, 3, 12);
+            DateTime expiration = new DateTime(2199, 3, 12, 1, 2, 3, DateTimeKind.Utc);
             AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = expiration });
 
             // Act.
@@ -86,7 +86,7 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             Assert.IsNotNull(token);
 
             SASParts parts = new SASParts(token.Uri);
-            Assert.AreEqual("2199-03-12T07%3A00%3A00Z", parts.Value("se"));
+            Assert.AreEqual("2199-03-12T01%3A02%3A03Z", parts.Value("se"));
         }
 
         [TestMethod]

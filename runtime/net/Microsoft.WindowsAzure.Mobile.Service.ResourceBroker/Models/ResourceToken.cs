@@ -10,7 +10,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Models
     public class ResourceToken
     {
         /// <summary>
-        /// Gets or sets the folder name.
+        /// Gets or sets the resource URI.
         /// </summary>
         [JsonProperty("uri")]
         public string Uri
