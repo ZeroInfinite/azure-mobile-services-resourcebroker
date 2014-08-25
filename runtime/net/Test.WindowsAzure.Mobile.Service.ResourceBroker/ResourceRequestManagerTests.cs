@@ -203,6 +203,45 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GenerateToken_ReturnsQueueToken()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+
+            // Act
+            ResourceToken token = m.GenerateToken("queue", this.GenerateQueueJson(), ConnectionString);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_ReturnsQueueToken2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+
+            // Act
+            ResourceToken token = m.GenerateToken(ResourceType.Queue, this.GenerateTableJson(), ConnectionString);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_ReturnsQueueToken3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+
+            // Act
+            ResourceToken token = m.GenerateToken(ResourceType.Queue, this.GenerateTableParameters(), ConnectionString);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GenerateToken_NullAppSettings_ThrowsArgumentException()
         {
             ResourceRequestManager m = new ResourceRequestManager();
@@ -329,6 +368,33 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionStringIsNull_ThrowsArgumentException()
+        {
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken("queue", this.GenerateQueueJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionStringIsNull_ThrowsArgumentException2()
+        {
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Queue, this.GenerateQueueJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionStringIsNull_ThrowsArgumentException3()
+        {
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Queue, this.GenerateTableParameters(), appSettings));
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GenerateToken_AppSettingsConnectionString_ReturnsTableToken()
         {
             // Setup
@@ -413,6 +479,51 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
 
             // Act
             ResourceToken token = m.GenerateToken(ResourceType.Blob, this.GenerateBlobParameters(), appSettings);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsConnectionString_ReturnsQueueToken()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            ResourceToken token = m.GenerateToken("queue", this.GenerateQueueJson(), appSettings);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsConnectionString_ReturnsQueueToken2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            ResourceToken token = m.GenerateToken(ResourceType.Queue, this.GenerateQueueJson(), appSettings);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsConnectionString_ReturnsQueueToken3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            ResourceToken token = m.GenerateToken(ResourceType.Queue, this.GenerateQueueParameters(), appSettings);
 
             // Assert
             Assert.IsNotNull(token.Uri);
@@ -507,6 +618,49 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_ReturnsQueueToken()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            ResourceToken token = m.GenerateToken("queue", this.GenerateQueueJson(), appSettings);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_ReturnsQueueToken2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            ResourceToken token = m.GenerateToken(ResourceType.Queue, this.GenerateQueueJson(), appSettings);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_ReturnsQueueToken3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            ResourceToken token = m.GenerateToken(ResourceType.Queue, this.GenerateQueueParameters(), appSettings);
+
+            // Assert
+            Assert.IsNotNull(token.Uri);
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GenerateToken_AppSettingsTableConnectionString_WithBlobRequest_ThrowsException()
         {
             // Setup
@@ -543,6 +697,42 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsTableConnectionString_WithQueueRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken("queue", this.GenerateQueueJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsTableConnectionString_WithQueueRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Queue, this.GenerateQueueJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsTableConnectionString_WithQueueRequest_ThrowsException3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Queue, this.GenerateQueueParameters(), appSettings));
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GenerateToken_AppSettingsBlobConnectionString_WithTableRequest_ThrowsException()
         {
             // Setup
@@ -573,6 +763,114 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             ResourceRequestManager m = new ResourceRequestManager();
             Dictionary<string, string> appSettings = new Dictionary<string, string>();
             appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableParameters(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsBlobConnectionString_WithQueueRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken("queue", this.GenerateQueueJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsBlobConnectionString_WithQueueRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Queue, this.GenerateQueueJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsBlobConnectionString_WithQueueRequest_ThrowsException3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Queue, this.GenerateQueueParameters(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_WithBlobRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken("blob", this.GenerateBlobJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_WithBlobRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Blob, this.GenerateBlobJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_WithBlobRequest_ThrowsException3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Blob, this.GenerateBlobParameters(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_WithTableRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken("table", this.GenerateTableJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_WithTableRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableJson(), appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GenerateToken_AppSettingsQueueConnectionString_WithTableRequest_ThrowsException3()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
 
             // Act
             this.ExpectException<InvalidOperationException>(() => m.GenerateToken(ResourceType.Table, this.GenerateTableParameters(), appSettings));
@@ -690,6 +988,24 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionStringIsNull_ThrowsArgumentException()
+        {
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString("queue", appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionStringIsNull_ThrowsArgumentException2()
+        {
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString(ResourceType.Queue, appSettings));
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GetConnectionString_AppSettingsConnectionString_ReturnsTableConnectionString()
         {
             // Setup
@@ -744,6 +1060,36 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
 
             // Act
             string c = m.GetConnectionString(ResourceType.Blob, appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsConnectionString_ReturnsQueueConnectionString()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            string c = m.GetConnectionString("queue", appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsConnectionString_ReturnsQueueConnectionString2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            string c = m.GetConnectionString(ResourceType.Queue, appSettings);
 
             // Assert
             Assert.AreEqual(c, ConnectionString);
@@ -809,6 +1155,35 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionString_ReturnsQueueConnectionString()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            string c = m.GetConnectionString("queue", appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionString_ReturnsQueueConnectionString2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            string c = m.GetConnectionString(ResourceType.Queue, appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GetConnectionString_AppSettingsTableConnectionString_WithBlobRequest_ThrowsException()
         {
             // Setup
@@ -833,6 +1208,30 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         }
 
         [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsTableConnectionString_WithQueueRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString("queue", appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsTableConnectionString_WithQueueRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString(ResourceType.Queue, appSettings));
+        }
+
+        [TestMethod]
         public void ResourceRequestManager_GetConnectionString_AppSettingsBlobConnectionString_WithTableRequest_ThrowsException()
         {
             // Setup
@@ -854,6 +1253,78 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
 
             // Act
             this.ExpectException<InvalidOperationException>(() => m.GetConnectionString(ResourceType.Table, appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsBlobConnectionString_WithQueueRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString("queue", appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsBlobConnectionString_WithQueueRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString(ResourceType.Queue, appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionString_WithTableRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString("table", appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionString_WithTableRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString(ResourceType.Table, appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionString_WithBlobRequest_ThrowsException()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString("blob", appSettings));
+        }
+
+        [TestMethod]
+        public void ResourceRequestManager_GetConnectionString_AppSettingsQueueConnectionString_WithBlobRequest_ThrowsException2()
+        {
+            // Setup
+            ResourceRequestManager m = new ResourceRequestManager();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => m.GetConnectionString(ResourceType.Blob, appSettings));
         }
 
         [TestMethod]
@@ -1030,6 +1501,15 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             return token;
         }
 
+        private JToken GenerateQueueJson()
+        {
+            JToken token = new JObject();
+            token["name"] = "table";
+            token["permissions"] = "raup";
+            token["expiry"] = DateTime.UtcNow.ToString();
+            return token;
+        }
+
         private ResourceParameters GenerateTableParameters()
         {
             return new ResourceParameters
@@ -1047,6 +1527,16 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
                 Container = "container",
                 Name = "blob",
                 Permissions = ResourcePermissions.ReadWrite,
+                Expiration = DateTime.UtcNow
+            };
+        }
+
+        private ResourceParameters GenerateQueueParameters()
+        {
+            return new ResourceParameters
+            {
+                Name = "queue",
+                Permissions = ResourcePermissions.ReadWrite | ResourcePermissions.Process,
                 Expiration = DateTime.UtcNow
             };
         }

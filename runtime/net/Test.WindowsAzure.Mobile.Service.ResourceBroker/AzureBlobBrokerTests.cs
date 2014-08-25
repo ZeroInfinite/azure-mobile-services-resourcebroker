@@ -363,5 +363,19 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             // Act
             this.ExpectHttpResponseException(HttpStatusCode.BadRequest, () => broker.CreateResourceToken());
         }
+
+        [TestMethod]
+        public void Blob_CreateResourceToken_WithProcessPermissions_IgnoresProcessPermissions()
+        {
+            AzureBlobBroker broker = new AzureBlobBroker(ConnectionString, new BlobParameters { Name = "blob", Container = "container", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+
+            // Act
+            ResourceToken token = broker.CreateResourceToken();
+
+            // Assert.
+            Assert.IsNotNull(token);
+            SASParts parts = new SASParts(token.Uri);
+            Assert.AreEqual("r", parts.Value("sp"));
+        }
     }
 }

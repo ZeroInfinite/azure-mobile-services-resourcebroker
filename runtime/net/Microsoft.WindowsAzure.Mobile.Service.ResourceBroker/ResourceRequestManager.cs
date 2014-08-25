@@ -200,6 +200,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
             {
                 case ResourceType.Blob:
                 case ResourceType.Table:
+                case ResourceType.Queue:
                     return this.GetStorageConnectionString(resourceType, settings);
 
                 default:
@@ -251,12 +252,17 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
             const string GenericStorageParameterName = "ResourceBrokerStorageConnectionString";
             const string BlobStorageParameterName = "ResourceBrokerBlobConnectionString";
             const string TableStorageParameterName = "ResourceBrokerTableConnectionString";
+            const string QueueStorageParameterName = "ResourceBrokerQueueConnectionString";
 
             string resourceSpecificParameterName = BlobStorageParameterName;
 
             if (resourceType == ResourceType.Table)
             {
                 resourceSpecificParameterName = TableStorageParameterName;
+            }
+            else if (resourceType == ResourceType.Queue)
+            {
+                resourceSpecificParameterName = QueueStorageParameterName;
             }
 
             string connectionString = null;
@@ -284,6 +290,10 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
             else if (string.Equals(type, "table", StringComparison.OrdinalIgnoreCase))
             {
                 return ResourceType.Table;
+            }
+            else if (string.Equals(type, "queue", StringComparison.OrdinalIgnoreCase))
+            {
+                return ResourceType.Queue;
             }
 
             throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -347,7 +357,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
                 }
                 else
                 {
-                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                    defaultParameters.Permissions = ExtractPermissions(permissions);
                 }
 
                 // Expiration.
@@ -359,6 +369,52 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
             }
 
             return defaultParameters;
+        }
+
+        /// <summary>
+        /// Extracts permissions based on the incoming permissions strings.
+        /// </summary>
+        /// <param name="permissions">The permissions string.</param>
+        /// <returns>Returns the permissions.</returns>
+        private static ResourcePermissions ExtractPermissions(string permissions)
+        {
+            if (string.IsNullOrWhiteSpace(permissions))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+            ResourcePermissions p = ResourcePermissions.None;
+
+            foreach (char c in permissions)
+            {
+                switch (c)
+                {
+                    case 'r':
+                        p |= ResourcePermissions.Read;
+                        break;
+
+                    case 'a':
+                        p |= ResourcePermissions.Add;
+                        break;
+
+                    case 'u':
+                        p |= ResourcePermissions.Update;
+                        break;
+
+                    case 'd':
+                        p |= ResourcePermissions.Delete;
+                        break;
+
+                    case 'p':
+                        p |= ResourcePermissions.Process;
+                        break;
+
+                    default:
+                        throw new HttpResponseException(HttpStatusCode.BadRequest);
+                }
+            }
+
+            return p;
         }
     }
 }

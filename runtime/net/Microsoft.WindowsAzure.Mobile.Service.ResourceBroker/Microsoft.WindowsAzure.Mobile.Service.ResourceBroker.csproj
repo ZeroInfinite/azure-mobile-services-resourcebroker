@@ -181,6 +181,7 @@
   <ItemGroup>
     <Compile Include="Brokers\AzureBlobBroker.cs" />
     <Compile Include="Brokers\AzureResourceBroker.cs" />
+    <Compile Include="Brokers\AzureQueueBroker.cs" />
     <Compile Include="Brokers\AzureTableBroker.cs" />
     <Compile Include="Models\BlobParameters.cs" />
     <Compile Include="Models\ResourcePermissions.cs" />

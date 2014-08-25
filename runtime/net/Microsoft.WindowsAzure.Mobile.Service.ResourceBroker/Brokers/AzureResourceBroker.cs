@@ -50,6 +50,8 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
                     return new AzureBlobBroker(connectionString, parameters);
                 case ResourceType.Table:
                     return new AzureTableBroker(connectionString, parameters);
+                case ResourceType.Queue:
+                    return new AzureQueueBroker(connectionString, parameters);
                 default:
                     throw new ArgumentException("type");
             }

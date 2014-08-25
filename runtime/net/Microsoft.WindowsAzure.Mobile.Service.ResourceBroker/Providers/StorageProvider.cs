@@ -9,6 +9,7 @@ using System.Web.Http;
 using Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Models;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
@@ -21,6 +22,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
         private CloudStorageAccount storageAccount;
         private CloudBlobClient blobClient;
         private CloudTableClient tableClient;
+        private CloudQueueClient queueClient;
 
         /// <summary>
         /// Initializes a new instance of the StorageProvider class.
@@ -65,6 +67,22 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
                 }
 
                 return this.tableClient;
+            }
+        }
+
+        /// <summary>
+        /// Gets the queue client.
+        /// </summary>
+        private CloudQueueClient QueueClient
+        {
+            get
+            {
+                if (this.queueClient == null)
+                {
+                    this.queueClient = this.storageAccount.CreateCloudQueueClient();
+                }
+
+                return this.queueClient;
             }
         }
 
@@ -129,6 +147,33 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
 
             // Append this to the URI.
             return new ResourceToken { Uri = table.Uri + sasTableToken };
+        }
+
+        /// <summary>
+        /// Creates a SAS key for a queue with the given name, permissions, and expiration.
+        /// </summary>
+        /// <param name="queueName">The name of the queue to create.</param>
+        /// <param name="permissions">The permissions to apply to the queue.</param>
+        /// <param name="expiration">The expiration time for the token.</param>
+        /// <returns>Returns the blob's URI access string.</returns>
+        public ResourceToken CreateQueueAccessToken(string queueName, ResourcePermissions permissions, DateTime? expiration = null)
+        {
+            if (string.IsNullOrWhiteSpace(queueName))
+            {
+                throw new ArgumentException("must not be null or empty", "queueName");
+            }
+
+            // Set up the SAS constraints.
+            SharedAccessQueuePolicy sasConstraints = GetQueueSasConstraints(permissions, expiration);
+
+            // Get a reference to the queue.
+            CloudQueue queue = this.QueueClient.GetQueueReference(queueName);
+
+            // Get the queue SAS.
+            string sasQueueToken = queue.GetSharedAccessSignature(sasConstraints);
+
+            // Append this to the URI.
+            return new ResourceToken { Uri = queue.Uri + sasQueueToken };
         }
 
         /// <summary>
@@ -213,6 +258,50 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
             if ((permissions & ResourcePermissions.Delete) == ResourcePermissions.Delete)
             {
                 sasConstraints.Permissions |= SharedAccessTablePermissions.Delete;
+            }
+
+            return sasConstraints;
+        }
+
+        /// <summary>
+        /// Creates SAS constraints from the given parameters.
+        /// </summary>
+        /// <param name="permissions">The permission set.</param>
+        /// <param name="expiration">The expiration time.</param>
+        /// <returns>Returns the access policy.</returns>
+        private static SharedAccessQueuePolicy GetQueueSasConstraints(ResourcePermissions permissions, DateTime? expiration)
+        {
+            SharedAccessQueuePolicy sasConstraints = new SharedAccessQueuePolicy();
+
+            // Set the start time to five minutes in the past.
+            sasConstraints.SharedAccessStartTime = DateTimeOffset.Now - TimeSpan.FromMinutes(5);
+
+            // Expiration.
+            if (expiration != null)
+            {
+                sasConstraints.SharedAccessExpiryTime = expiration.Value;
+            }
+
+            // Permissions.
+            sasConstraints.Permissions = SharedAccessQueuePermissions.None;
+            if ((permissions & ResourcePermissions.Read) == ResourcePermissions.Read)
+            {
+                sasConstraints.Permissions |= SharedAccessQueuePermissions.Read;
+            }
+
+            if ((permissions & ResourcePermissions.Add) == ResourcePermissions.Add)
+            {
+                sasConstraints.Permissions |= SharedAccessQueuePermissions.Add;
+            }
+
+            if ((permissions & ResourcePermissions.Update) == ResourcePermissions.Update)
+            {
+                sasConstraints.Permissions |= SharedAccessQueuePermissions.Update;
+            }
+
+            if ((permissions & ResourcePermissions.Process) == ResourcePermissions.Process)
+            {
+                sasConstraints.Permissions |= SharedAccessQueuePermissions.ProcessMessages;
             }
 
             return sasConstraints;

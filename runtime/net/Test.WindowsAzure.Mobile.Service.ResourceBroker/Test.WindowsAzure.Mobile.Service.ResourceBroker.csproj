@@ -189,6 +189,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AzureQueueBrokerTests.cs" />
     <Compile Include="ResourceRequestManagerTests.cs" />
     <Compile Include="AzureTableBrokerTests.cs" />
     <Compile Include="AzureBlobBrokerTests.cs" />

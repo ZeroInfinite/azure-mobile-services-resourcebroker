@@ -139,7 +139,7 @@ The body of the POST request must contain a JSON payload containing the detail o
 
 **name**: The name of the blob or table to access
 
-**permissions**: The requested access permissions. The valid values are r, w, or rw, indicating read-only access, write-only access, or read-write access
+**permissions**: The requested access permissions. The values must be specified in the following order: 'raudp', for read, add, update, delete, and process, respectively. Individual values can be ommitted if desired. For example, a permission request containing 'ud' would give access to update and delete items, but not to read, add, or process items. It is also possible to specify the 'w' value as a shortcut for all write access. 'w' is equivalent to 'aud'. For example, it is possible to specify 'rw' as a value permission for all read and write access.
 
 **expiry**: The requested expiration date and time for the resource token
 

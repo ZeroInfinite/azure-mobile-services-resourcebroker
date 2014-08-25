@@ -19,6 +19,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Models
         /// <summary>
         /// Table storage.
         /// </summary>
-        Table
+        Table,
+
+        /// <summary>
+        /// Queue storage.
+        /// </summary>
+        Queue
     }
 }

@@ -399,5 +399,20 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
             SASParts parts = new SASParts(token.Uri);
             Assert.AreEqual("rud", parts.Value("sp"));
         }
+
+        [TestMethod]
+        public void Table_CreateResourceToken_WithProcessPermissions_IgnoresProcessPermissions()
+        {
+            // Setup
+            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+
+            // Act
+            ResourceToken token = broker.CreateResourceToken();
+
+            // Assert.
+            Assert.IsNotNull(token);
+            SASParts parts = new SASParts(token.Uri);
+            Assert.AreEqual("r", parts.Value("sp"));
+        }
     }
 }
