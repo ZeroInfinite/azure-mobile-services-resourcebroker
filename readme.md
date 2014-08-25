@@ -155,3 +155,15 @@ The following example shows the body payload requesting an access token for a bl
 	    "permissions": "w",
         "expiry": "2015-12-01T07:34:42-5:00Z"
 	}
+
+# Need Help? #
+Be sure to check out the Mobile Services [Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) if you are having trouble. The Mobile Services product team actively monitors the forum and will be more than happy to assist you.
+
+# Contribute Code or Provide Feedback #
+If you would like to become an active contributor to this project please follow the instructions provided in [Microsoft Azure Projects Contribution Guidelines](http://azure.github.com/guidelines.html).
+
+If you encounter any bugs with the library please file an issue in the Issues section of the project.
+
+# Learn More #
+[Microsoft Azure Mobile Services Developer Center](http://azure.microsoft.com/en-us/develop/mobile)
+
