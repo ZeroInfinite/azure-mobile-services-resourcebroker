@@ -55,7 +55,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers
         /// <summary>
         /// Gets the table client.
         /// </summary>
-        public CloudTableClient TableClient
+        private CloudTableClient TableClient
         {
             get
             {
