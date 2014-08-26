@@ -11,22 +11,32 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
     /// <summary>
     /// Generates tokens or connection strings for a queue resource.
     /// </summary>
-    public class AzureQueueBroker : AzureResourceBroker
+    public class AzureQueueBroker : AzureStorageBroker
     {
-        private ResourceParameters queueParameters;
-        private StorageProvider storageProvider;
+        public const string ResourceKey = "queue";
 
         /// <summary>
-        /// Initializes a new instance of the AzureQueueBroker class.
+        /// Gets the collection of allowed permissions for this resource type.
         /// </summary>
-        /// <param name="storageConnectionString">The Azure storage connection string.</param>
-        /// <param name="parameters">The optional parameters.</param>
-        public AzureQueueBroker(string storageConnectionString, ResourceParameters parameters)
-            : base(parameters)
+        public override ResourcePermissions AllowedPermissions
         {
-            if (string.IsNullOrWhiteSpace(storageConnectionString))
+            get
             {
-                throw new ArgumentException("storageConnectionString is invalid");
+                return ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Process;
+            }
+        }
+
+        /// <summary>
+        /// Generates the resource.
+        /// </summary>
+        /// <param name="connectionString">Optional connection string for the resource.</param>
+        /// <param name="parameters">The resource parameters.</param>
+        /// <returns>Returns the resource.</returns>
+        public override ResourceToken CreateResourceToken(string connectionString, ResourceParameters parameters)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new ArgumentException("connectionString is invalid");
             }
 
             if (parameters == null)
@@ -34,23 +44,39 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
                 throw new ArgumentNullException("parameters");
             }
 
-            this.queueParameters = parameters;
+            ResourceParameters queueParameters = parameters;
 
-            if (string.IsNullOrWhiteSpace(this.queueParameters.Name))
+            if (string.IsNullOrWhiteSpace(queueParameters.Name))
             {
                 throw new ArgumentException("The queue name must not be null or empty", "parameters.Name");
             }
 
-            this.storageProvider = new StorageProvider(storageConnectionString);
+            StorageProvider storageProvider = new StorageProvider(connectionString);
+
+            return storageProvider.CreateQueueAccessToken(queueParameters.Name, queueParameters.Permissions, queueParameters.Expiration);
         }
 
         /// <summary>
-        /// Generates the resource.
+        /// Extracts the connection string for the resource from the given settings.
         /// </summary>
-        /// <returns>Returns the resource.</returns>
-        public override ResourceToken CreateResourceToken()
+        /// <param name="settings">The settings.</param>
+        /// <returns>The connection string.</returns>
+        public override string ExtractConnectionString(IDictionary<string, string> settings)
         {
-            return this.storageProvider.CreateQueueAccessToken(this.queueParameters.Name, this.queueParameters.Permissions, this.queueParameters.Expiration);
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            string connectionString = null;
+            settings.TryGetValue("ResourceBrokerQueueConnectionString", out connectionString);
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                return base.ExtractConnectionString(settings);
+            }
+
+            return connectionString;
         }
     }
 }

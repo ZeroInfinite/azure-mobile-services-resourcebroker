@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,55 +16,55 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         private const string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=test;AccountKey=3w1OwI/N6dqvmN0Iaa0/y6zlqL81H42K/mfIbIIKeFQkNpHSNvOcnWpucvrX5rbKGm+WKEUxaOZikeTMWpXfxA==";
 
         [TestMethod]
-        public void Table_Create_WithNullConnectionString_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithNullConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(null, new ResourceParameters { Name = "table" }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(null, new ResourceParameters { Name = "table" }));
         }
 
         [TestMethod]
-        public void Table_Create_WithEmptyConnectionString_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithEmptyConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(string.Empty, new ResourceParameters { Name = "table" }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(string.Empty, new ResourceParameters { Name = "table" }));
         }
 
         [TestMethod]
-        public void Table_Create_WithWhitespaceConnectionString_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithWhitespaceConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(" ", new ResourceParameters { Name = "table" }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(" ", new ResourceParameters { Name = "table" }));
         }
 
         [TestMethod]
-        public void Table_Create_WithNullParameters_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithNullParameters_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(ConnectionString, null));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(ConnectionString, null));
         }
 
         [TestMethod]
-        public void Table_Create_WithNullTableName_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithNullTableName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(ConnectionString, new ResourceParameters { Name = null }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(ConnectionString, new ResourceParameters { Name = null }));
         }
 
         [TestMethod]
-        public void Table_Create_WithEmptyTableName_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithEmptyTableName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(ConnectionString, new ResourceParameters { Name = string.Empty }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(ConnectionString, new ResourceParameters { Name = string.Empty }));
         }
 
         [TestMethod]
-        public void Table_Create_WithWhitespaceTableName_ThrowsArgumentException()
+        public void Table_CreateResourceToken_WithWhitespaceTableName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureTableBroker(ConnectionString, new ResourceParameters { Name = " " }));
+            this.ExpectException<ArgumentException>(() => new AzureTableBroker().CreateResourceToken(ConnectionString, new ResourceParameters { Name = " " }));
         }
 
         [TestMethod]
         public void Table_CreateResourceToken_ReturnsCorrectHostPath()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -77,10 +78,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             DateTime expiration = new DateTime(2199, 3, 12, 1, 2, 3, DateTimeKind.Utc);
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = expiration });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = expiration });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -93,10 +94,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithNoExpirationDate_ReturnsNoExpirationDate()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -109,10 +110,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_ReturnsExpectedStartDate()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -137,10 +138,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -152,10 +153,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithWritePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -167,10 +168,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadWritePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.ReadWrite, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.ReadWrite, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -181,10 +182,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Table_CreateResourceToken_WithReadAndWritePermissions_ReturnsCorrectAccess()
         {
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -195,10 +196,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Table_CreateResourceToken_WithReadAddUpdateDeletePermissions_ReturnsCorrectAccess()
         {
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -209,10 +210,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Table_CreateResourceToken_WithAddUpdateDeletePermissions_ReturnsCorrectAccess()
         {
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -224,10 +225,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithAddPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -239,10 +240,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadAddPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -254,10 +255,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -269,10 +270,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -284,10 +285,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithDeletePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -299,10 +300,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadDeletePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -314,10 +315,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithAddUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -329,10 +330,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadAddUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -344,10 +345,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithAddDeletePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Add | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -359,10 +360,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadAddDeletePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -374,10 +375,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithUpdateDeletePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -389,10 +390,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithReadUpdateDeletePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -404,15 +405,78 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Table_CreateResourceToken_WithProcessPermissions_IgnoresProcessPermissions()
         {
             // Setup
-            AzureTableBroker broker = new AzureTableBroker(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureTableBroker broker = new AzureTableBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "table", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
             SASParts parts = new SASParts(token.Uri);
             Assert.AreEqual("r", parts.Value("sp"));
+        }
+
+        [TestMethod]
+        public void Table_ExtractConnectionString_AppSettingsTableConnectionStringIsNull_ThrowsArgumentException()
+        {
+            AzureTableBroker broker = new AzureTableBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => broker.ExtractConnectionString(appSettings));
+        }
+
+        [TestMethod]
+        public void Table_ExtractConnectionString_AppSettingsConnectionString_ReturnsTableConnectionString()
+        {
+            // Setup
+            AzureTableBroker broker = new AzureTableBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            string c = broker.ExtractConnectionString(appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
+        public void Table_ExtractConnectionString_AppSettingsTableConnectionString_ReturnsTableConnectionString()
+        {
+            // Setup
+            AzureTableBroker broker = new AzureTableBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            string c = broker.ExtractConnectionString(appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
+        public void Table_ExtractConnectionString_WithBlobConnectionString_ThrowsException()
+        {
+            // Setup
+            AzureTableBroker broker = new AzureTableBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => broker.ExtractConnectionString(appSettings));
+        }
+
+        [TestMethod]
+        public void Table_ExtractConnectionString_WithQueueConnectionString_ThrowsException()
+        {
+            // Setup
+            AzureTableBroker broker = new AzureTableBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => broker.ExtractConnectionString(appSettings));
         }
     }
 }

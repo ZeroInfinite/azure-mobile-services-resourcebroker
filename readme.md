@@ -48,7 +48,12 @@ Note: If you want to share same storage account for both blob and table, you can
 ## .NET Back-End ##
 To expose a ResourceBroker controller from your .NET Mobile Services back-end, perform the following steps:
 
-### Storage ###
+### Installation ###
+Clone your Mobile Service repository and install the following Nuget module to your Mobile Services back-end project:
+
+    http://www.nuget.org/packages/Microsoft.WindowsAzure.Mobile.Service.ResourceBroker/
+
+### Get Started ###
 
 Create an Azure Storage account, and take note of the primary access key.
 
@@ -139,7 +144,7 @@ The body of the POST request must contain a JSON payload containing the detail o
 
 **name**: The name of the blob or table to access
 
-**permissions**: The requested access permissions. The values must be specified in the following order: 'raudp', for read, add, update, delete, and process, respectively. Individual values can be ommitted if desired. For example, a permission request containing 'ud' would give access to update and delete items, but not to read, add, or process items. It is also possible to specify the 'w' value as a shortcut for all write access. 'w' is equivalent to 'aud'. For example, it is possible to specify 'rw' as a value permission for all read and write access.
+**permissions**: The requested access permissions. The possible values are: 'raudp', for read, add, update, delete, and process, respectively. Individual values may be omitted if desired. For example, a permission request containing 'ud' would give access to update and delete items, but not to read, add, or process items. It is also possible to specify the 'w' value as a shortcut for write access. 'w' is equivalent to 'aud'. For example, the 'rw' permission string would give access to all reads and writes, though it does not include the process permission.
 
 **expiry**: The requested expiration date and time for the resource token
 
@@ -153,8 +158,17 @@ The following example shows the body payload requesting an access token for a bl
 	    "name": "myblob",
 	    "container": "mycontainer",
 	    "permissions": "w",
-        "expiry": "2015-12-01T07:34:42-5:00Z"
+        "expiry": "2015-12-01T07:34:42Z"
 	}
+
+The following example shows the body payload requesting a token for a queue named "myqueue", with read, add, update, and process permissions:
+
+    {
+	    "name": "myqueue",
+	    "permissions": "raup",
+        "expiry": "2015-12-01T07:34:42Z"
+	}
+
 
 # Need Help? #
 Be sure to check out the Mobile Services [Developer Forum](http://social.msdn.microsoft.com/Forums/en-US/azuremobile/) if you are having trouble. The Mobile Services product team actively monitors the forum and will be more than happy to assist you.

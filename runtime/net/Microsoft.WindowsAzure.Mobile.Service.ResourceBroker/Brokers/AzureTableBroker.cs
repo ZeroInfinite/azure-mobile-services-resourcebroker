@@ -11,22 +11,32 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
     /// <summary>
     /// Generates tokens or connection strings for a table resource.
     /// </summary>
-    public class AzureTableBroker : AzureResourceBroker
+    public class AzureTableBroker : AzureStorageBroker
     {
-        private ResourceParameters tableParameters;
-        private StorageProvider storageProvider;
+        public const string ResourceKey = "table";
 
         /// <summary>
-        /// Initializes a new instance of the AzureTableBroker class.
+        /// Gets the collection of allowed permissions for this resource type.
         /// </summary>
-        /// <param name="storageConnectionString">The Azure storage connection string.</param>
-        /// <param name="parameters">The optional parameters.</param>
-        public AzureTableBroker(string storageConnectionString, ResourceParameters parameters)
-            : base(parameters)
+        public override ResourcePermissions AllowedPermissions
         {
-            if (string.IsNullOrWhiteSpace(storageConnectionString))
+            get
             {
-                throw new ArgumentException("storageConnectionString is invalid");
+                return ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete;
+            }
+        }
+
+        /// <summary>
+        /// Generates the resource.
+        /// </summary>
+        /// <param name="connectionString">Optional connection string for the resource.</param>
+        /// <param name="parameters">The resource parameters.</param>
+        /// <returns>Returns the resource.</returns>
+        public override ResourceToken CreateResourceToken(string connectionString, ResourceParameters parameters)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new ArgumentException("connectionString is invalid");
             }
 
             if (parameters == null)
@@ -34,23 +44,39 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
                 throw new ArgumentNullException("parameters");
             }
 
-            this.tableParameters = parameters;
+            ResourceParameters tableParameters = parameters;
 
-            if (string.IsNullOrWhiteSpace(this.tableParameters.Name))
+            if (string.IsNullOrWhiteSpace(tableParameters.Name))
             {
                 throw new ArgumentException("The table name must not be null or empty", "parameters.Name");
             }
 
-            this.storageProvider = new StorageProvider(storageConnectionString);
+            StorageProvider storageProvider = new StorageProvider(connectionString);
+
+            return storageProvider.CreateTableAccessToken(tableParameters.Name, tableParameters.Permissions, tableParameters.Expiration);
         }
 
         /// <summary>
-        /// Generates the resource.
+        /// Extracts the connection string for the resource from the given settings.
         /// </summary>
-        /// <returns>Returns the resource.</returns>
-        public override ResourceToken CreateResourceToken()
+        /// <param name="settings">The settings.</param>
+        /// <returns>The connection string.</returns>
+        public override string ExtractConnectionString(IDictionary<string, string> settings)
         {
-            return this.storageProvider.CreateTableAccessToken(this.tableParameters.Name, this.tableParameters.Permissions, this.tableParameters.Expiration);
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            string connectionString = null;
+            settings.TryGetValue("ResourceBrokerTableConnectionString", out connectionString);
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                return base.ExtractConnectionString(settings);
+            }
+
+            return connectionString;
         }
     }
 }

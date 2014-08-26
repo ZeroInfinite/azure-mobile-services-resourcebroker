@@ -9,28 +9,39 @@ using Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Models;
 using Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Providers;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
 {
     /// <summary>
     /// Generates tokens or connection strings for a BLOB resource.
     /// </summary>
-    public class AzureBlobBroker : AzureResourceBroker
+    public class AzureBlobBroker : AzureStorageBroker
     {
-        private BlobParameters blobParameters;
-        private StorageProvider storageProvider;
+        public const string ResourceKey = "blob";
 
         /// <summary>
-        /// Initializes a new instance of the AzureBlobBroker class.
+        /// Gets the collection of allowed permissions for this resource type.
         /// </summary>
-        /// <param name="storageConnectionString">The Azure storage connection string.</param>
-        /// <param name="parameters">The optional parameters.</param>
-        public AzureBlobBroker(string storageConnectionString, ResourceParameters parameters)
-            : base(parameters)
+        public override ResourcePermissions AllowedPermissions
         {
-            if (string.IsNullOrWhiteSpace(storageConnectionString))
+            get
             {
-                throw new ArgumentException("storageConnectionString is invalid");
+                return ResourcePermissions.Read | ResourcePermissions.Write;
+            }
+        }
+
+        /// <summary>
+        /// Generates the resource.
+        /// </summary>
+        /// <param name="connectionString">Optional connection string for the resource.</param>
+        /// <param name="parameters">The resource parameters.</param>
+        /// <returns>Returns the resource.</returns>
+        public override ResourceToken CreateResourceToken(string connectionString, ResourceParameters parameters)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new ArgumentException("connectionString is invalid");
             }
 
             if (parameters == null)
@@ -38,33 +49,91 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker.Brokers
                 throw new ArgumentNullException("parameters");
             }
 
-            this.blobParameters = parameters as BlobParameters;
+            BlobParameters blobParameters = parameters as BlobParameters;
 
-            if (this.blobParameters == null)
+            if (blobParameters == null)
             {
                 throw new ArgumentException("Expected a BlobParameters collection", "parameters");
             }
 
-            if (string.IsNullOrWhiteSpace(this.blobParameters.Container))
+            if (string.IsNullOrWhiteSpace(blobParameters.Container))
             {
                 throw new ArgumentException("The container name must not be null or empty", "parameters.Container");
             }
 
-            if (string.IsNullOrWhiteSpace(this.blobParameters.Name))
+            if (string.IsNullOrWhiteSpace(blobParameters.Name))
             {
                 throw new ArgumentException("The blob name must not be null or empty", "parameters.Name");
             }
 
-            this.storageProvider = new StorageProvider(storageConnectionString);
+            StorageProvider storageProvider = new StorageProvider(connectionString);
+
+            return storageProvider.CreateBlobAccessToken(blobParameters.Container, blobParameters.Name, blobParameters.Permissions, blobParameters.Expiration);
         }
 
         /// <summary>
-        /// Generates the resource.
+        /// Extracts the connection string for the resource from the given settings.
         /// </summary>
-        /// <returns>Returns the resource.</returns>
-        public override ResourceToken CreateResourceToken()
+        /// <param name="settings">The settings.</param>
+        /// <returns>The connection string.</returns>
+        public override string ExtractConnectionString(IDictionary<string, string> settings)
         {
-            return this.storageProvider.CreateBlobAccessToken(this.blobParameters.Container, this.blobParameters.Name, this.blobParameters.Permissions, this.blobParameters.Expiration);
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            string connectionString = null;
+            settings.TryGetValue("ResourceBrokerBlobConnectionString", out connectionString);
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                return base.ExtractConnectionString(settings);
+            }
+
+            return connectionString;
+        }
+
+        /// <summary>
+        /// Extracts the parameters for a request.
+        /// </summary>
+        /// <param name="parameters">The parameters to extract.</param>
+        /// <param name="defaultParameters">Optional parameters instance to use.</param>
+        /// <returns>Returns the extracted parameters.</returns>
+        public override ResourceParameters ExtractParameters(JToken parameters, ResourceParameters defaultParameters = null)
+        {
+            BlobParameters blobParameters = null;
+
+            if (defaultParameters == null)
+            {
+                blobParameters = new BlobParameters();
+            }
+            else
+            {
+                blobParameters = defaultParameters as BlobParameters;
+                if (blobParameters == null)
+                {
+                    throw new ArgumentException("Must be a BlobParameters instance", "defaultParameters");
+                }
+            }
+
+            base.ExtractParameters(parameters, blobParameters);
+
+            try
+            {
+                // Container.
+                blobParameters.Container = parameters.Value<string>("container");
+                if (string.IsNullOrWhiteSpace(blobParameters.Container))
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+            return blobParameters;
         }
     }
 }

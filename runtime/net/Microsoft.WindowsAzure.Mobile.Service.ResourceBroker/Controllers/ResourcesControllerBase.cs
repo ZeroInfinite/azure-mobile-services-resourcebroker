@@ -19,8 +19,6 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
     [AuthorizeLevel(AuthorizationLevel.User)]
     public abstract class ResourcesControllerBase : ApiController
     {
-        private ResourceRequestManager requestManager = new ResourceRequestManager();
-
         /// <summary>
         /// The services property.
         /// </summary>
@@ -28,17 +26,6 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// Gets the request manager helper instance.
-        /// </summary>
-        protected ResourceRequestManager RequestManager
-        {
-            get
-            {
-                return this.requestManager;
-            }
         }
 
         /// <summary>
@@ -67,7 +54,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.ResourceBroker
         /// <returns>Returns the generated SAS token or connection string.</returns>
         protected virtual ResourceToken GenerateToken(string type, JToken parameters)
         {
-            return this.requestManager.GenerateToken(type, parameters, this.Services.Settings);
+            AzureResourceBroker broker = AzureResourceBroker.Create(type);
+
+            ResourceParameters p = broker.ExtractParameters(parameters);
+            string c = broker.ExtractConnectionString(this.Services.Settings);
+            return broker.CreateResourceToken(c, p);
         }
     }
 }

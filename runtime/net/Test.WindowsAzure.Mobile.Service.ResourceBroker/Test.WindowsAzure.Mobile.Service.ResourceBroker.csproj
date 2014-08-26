@@ -190,7 +190,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AzureQueueBrokerTests.cs" />
-    <Compile Include="ResourceRequestManagerTests.cs" />
+    <Compile Include="AzureStorageBrokerTests.cs" />
+    <Compile Include="AzureResourceBrokerTests.cs" />
     <Compile Include="AzureTableBrokerTests.cs" />
     <Compile Include="AzureBlobBrokerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

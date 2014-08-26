@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,55 +16,55 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         private const string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=test;AccountKey=3w1OwI/N6dqvmN0Iaa0/y6zlqL81H42K/mfIbIIKeFQkNpHSNvOcnWpucvrX5rbKGm+WKEUxaOZikeTMWpXfxA==";
 
         [TestMethod]
-        public void Queue_Create_WithNullConnectionString_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithNullConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(null, new ResourceParameters { Name = "queue" }));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(null, new ResourceParameters { Name = "queue" }));
         }
 
         [TestMethod]
-        public void Queue_Create_WithEmptyConnectionString_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithEmptyConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(string.Empty, new ResourceParameters { Name = "queue" }));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(string.Empty, new ResourceParameters { Name = "queue" }));
         }
 
         [TestMethod]
-        public void Queue_Create_WithWhitespaceConnectionString_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithWhitespaceConnectionString_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(" ", new ResourceParameters { Name = "queue" }));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(" ", new ResourceParameters { Name = "queue" }));
         }
 
         [TestMethod]
-        public void Queue_Create_WithNullParameters_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithNullParameters_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(ConnectionString, null));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(ConnectionString, null));
         }
 
         [TestMethod]
-        public void Queue_Create_WithNullQueueName_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithNullQueueName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = null }));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(ConnectionString, new ResourceParameters { Name = null }));
         }
 
         [TestMethod]
-        public void Queue_Create_WithEmptyQueueName_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithEmptyQueueName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = string.Empty }));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(ConnectionString, new ResourceParameters { Name = string.Empty }));
         }
 
         [TestMethod]
-        public void Queue_Create_WithWhitespaceQueueName_ThrowsArgumentException()
+        public void Queue_CreateResourceToken_WithWhitespaceQueueName_ThrowsArgumentException()
         {
-            this.ExpectException<ArgumentException>(() => new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = " " }));
+            this.ExpectException<ArgumentException>(() => new AzureQueueBroker().CreateResourceToken(ConnectionString, new ResourceParameters { Name = " " }));
         }
 
         [TestMethod]
         public void Queue_CreateResourceToken_ReturnsCorrectHostPath()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -77,10 +78,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         {
             // Setup
             DateTime expiration = new DateTime(2199, 3, 12, 1, 2, 3, DateTimeKind.Utc);
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read, Expiration = expiration });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read, Expiration = expiration });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -93,10 +94,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithNoExpirationDate_ReturnsNoExpirationDate()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -109,10 +110,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_ReturnsExpectedStartDate()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act.
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -137,10 +138,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -152,10 +153,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithWritePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -167,10 +168,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadWritePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.ReadWrite, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.ReadWrite, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -181,10 +182,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Queue_CreateResourceToken_WithReadAndWritePermissions_ReturnsCorrectAccess()
         {
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Write, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -195,10 +196,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Queue_CreateResourceToken_WithReadAndProcessPermissions_ReturnsCorrectAccess()
         {
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -209,10 +210,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Queue_CreateResourceToken_WithReadAddUpdateDeletePermissions_ReturnsCorrectAccess()
         {
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -223,10 +224,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Queue_CreateResourceToken_WithReadAddUpdateProcessPermissions_ReturnsCorrectAccess()
         {
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -237,10 +238,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Queue_CreateResourceToken_WithReadAddUpdateDeleteProcessPermissions_ReturnsCorrectAccess()
         {
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Delete | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -251,10 +252,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         [TestMethod]
         public void Queue_CreateResourceToken_WithAddUpdateProcessPermissions_ReturnsCorrectAccess()
         {
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add | ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -266,10 +267,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithAddPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -281,10 +282,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadAddPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -296,10 +297,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -311,10 +312,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -326,10 +327,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithProcessPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -341,10 +342,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadProcessPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -356,10 +357,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithAddUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -371,10 +372,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadAddUpdatePermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Update, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -386,10 +387,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithAddProcessPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Add | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -401,10 +402,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadAddProcessPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Add | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -416,10 +417,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithUpdateProcessPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -431,10 +432,10 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithReadUpdateProcessPermissions_ReturnsCorrectAccess()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Update | ResourcePermissions.Process, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
@@ -446,15 +447,78 @@ namespace Test.WindowsAzure.Mobile.Service.ResourceBroker
         public void Queue_CreateResourceToken_WithDeletePermissions_IgnoresProcessPermissions()
         {
             // Setup
-            AzureQueueBroker broker = new AzureQueueBroker(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
+            AzureQueueBroker broker = new AzureQueueBroker();
 
             // Act
-            ResourceToken token = broker.CreateResourceToken();
+            ResourceToken token = broker.CreateResourceToken(ConnectionString, new ResourceParameters { Name = "queue", Permissions = ResourcePermissions.Read | ResourcePermissions.Delete, Expiration = DateTime.Now + TimeSpan.FromDays(1) });
 
             // Assert.
             Assert.IsNotNull(token);
             SASParts parts = new SASParts(token.Uri);
             Assert.AreEqual("r", parts.Value("sp"));
+        }
+
+        [TestMethod]
+        public void Queue_ExtractConnectionString_AppSettingsQueueConnectionStringIsNull_ThrowsArgumentException()
+        {
+            AzureQueueBroker broker = new AzureQueueBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", null);
+            this.ExpectException<InvalidOperationException>(() => broker.ExtractConnectionString(appSettings));
+        }
+
+        [TestMethod]
+        public void Queue_ExtractConnectionString_AppSettingsConnectionString_ReturnsQueueConnectionString()
+        {
+            // Setup
+            AzureQueueBroker broker = new AzureQueueBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerStorageConnectionString", ConnectionString);
+
+            // Act
+            string c = broker.ExtractConnectionString(appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
+        public void Queue_ExtractConnectionString_AppSettingsQueueConnectionString_ReturnsQueueConnectionString()
+        {
+            // Setup
+            AzureQueueBroker broker = new AzureQueueBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerQueueConnectionString", ConnectionString);
+
+            // Act
+            string c = broker.ExtractConnectionString(appSettings);
+
+            // Assert
+            Assert.AreEqual(c, ConnectionString);
+        }
+
+        [TestMethod]
+        public void Queue_ExtractConnectionString_WithBlobConnectionString_ThrowsException()
+        {
+            // Setup
+            AzureQueueBroker broker = new AzureQueueBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerBlobConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => broker.ExtractConnectionString(appSettings));
+        }
+
+        [TestMethod]
+        public void Queue_ExtractConnectionString_WithTableConnectionString_ThrowsException()
+        {
+            // Setup
+            AzureQueueBroker broker = new AzureQueueBroker();
+            Dictionary<string, string> appSettings = new Dictionary<string, string>();
+            appSettings.Add("ResourceBrokerTableConnectionString", ConnectionString);
+
+            // Act
+            this.ExpectException<InvalidOperationException>(() => broker.ExtractConnectionString(appSettings));
         }
     }
 }
