@@ -49,9 +49,9 @@ Note: If you want to share same storage account for both blob and table, you can
 To expose a ResourceBroker controller from your .NET Mobile Services back-end, perform the following steps:
 
 ### Installation ###
-Clone your Mobile Service repository and install the following Nuget module to your Mobile Services back-end project:
+Clone your Mobile Service repository and install the Nuget module to your Mobile Services back-end project. Enter the following into the Package Manager Console in Visual Studio:
 
-    http://www.nuget.org/packages/Microsoft.WindowsAzure.Mobile.Service.ResourceBroker/
+    Install-Package Microsoft.WindowsAzure.Mobile.Service.ResourceBroker 
 
 ### Get Started ###
 
