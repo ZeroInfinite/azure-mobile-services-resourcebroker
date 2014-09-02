@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InvalidBlobResponseFromBroker" xml:space="preserve">
+    <value>Response to request to /api/resources/blob did not contain the required "uri" property. Make sure that the broker is properly configured.</value>
+  </data>
+  <data name="InvalidResponseFromStorage" xml:space="preserve">
+    <value>Request to the storage REST API failed. Check inner exception for more details.</value>
+  </data>
   <data name="RequestToBrokerReturns404" xml:space="preserve">
     <value>Resource broker cannot be accessed on the service. Make sure that it is installed correctly. See https://github.com/azure/azure-mobile-services-resourcebroker for more information.</value>
   </data>

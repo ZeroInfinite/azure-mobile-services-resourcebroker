@@ -62,6 +62,24 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Response to request to /api/resources/blob did not contain the required &quot;uri&quot; property. Make sure that the broker is properly configured..
+        /// </summary>
+        internal static string InvalidBlobResponseFromBroker {
+            get {
+                return ResourceManager.GetString("InvalidBlobResponseFromBroker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request to the storage REST API failed. Check inner exception for more details..
+        /// </summary>
+        internal static string InvalidResponseFromStorage {
+            get {
+                return ResourceManager.GetString("InvalidResponseFromStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resource broker cannot be accessed on the service. Make sure that it is installed correctly. See https://github.com/azure/azure-mobile-services-resourcebroker for more information..
         /// </summary>
         internal static string RequestToBrokerReturns404 {

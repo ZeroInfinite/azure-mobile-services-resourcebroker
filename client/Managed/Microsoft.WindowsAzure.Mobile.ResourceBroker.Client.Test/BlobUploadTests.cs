@@ -75,6 +75,56 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
             }
         }
 
+        [TestMethod]
+        public async Task UploadBlob_BrokerReturnsInvalidResponse_ExpectedExceptionIsCaught()
+        {
+            var mobileServiceHandler = new TestHttpHandler(HttpStatusCode.OK);
+            mobileServiceHandler.SetResponse("{\"other\":\"value\"}", "application/json");
+            var client = new MobileServiceClient(
+                AppUrl,
+                AppKey,
+                mobileServiceHandler);
+
+            var storageHandler = new TestHttpHandler(HttpStatusCode.Created);
+            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+
+            var ms = GetBlobContent();
+            try
+            {
+                var url = await client.UploadFileToBlobStorage("container", "file", "text/plain", ms);
+                Assert.Fail("Upload call should have thrown an exception");
+            }
+            catch (InvalidOperationException) { }
+        }
+
+        [TestMethod]
+        public async Task UploadBlob_StorageReturnsError_AppropriateExceptionIsThrown()
+        {
+            var mobileServiceHandler = new TestHttpHandler(HttpStatusCode.OK);
+            var sasToken = "http://the.sas.token.com/url?query=string";
+            var sasTokenNoQuery = "http://the.sas.token.com/url";
+            mobileServiceHandler.SetResponse("{\"uri\":\"" + sasToken + "\"}", "application/json");
+            var client = new MobileServiceClient(
+                AppUrl,
+                AppKey,
+                mobileServiceHandler);
+
+            var storageHandler = new TestHttpHandler(HttpStatusCode.InternalServerError);
+            storageHandler.SetResponse("An error occurred");
+            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+
+            var ms = GetBlobContent();
+            try
+            {
+                var url = await client.UploadFileToBlobStorage("container", "file", "text/plain", ms);
+            }
+            catch (InvalidOperationException e)
+            {
+                Assert.IsNotNull(e.InnerException);
+                Assert.IsInstanceOfType(e.InnerException, typeof(HttpRequestException));
+            }
+        }
+
         private MemoryStream GetBlobContent()
         {
             return new MemoryStream(new UTF8Encoding(false).GetBytes(testBlobContent));

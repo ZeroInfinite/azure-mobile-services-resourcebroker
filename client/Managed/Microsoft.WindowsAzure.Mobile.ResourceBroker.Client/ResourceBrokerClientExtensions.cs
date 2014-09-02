@@ -55,6 +55,10 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
             {
                 var sasToken = await client.InvokeApiAsync("resources/blob", sasRequestPayload);
                 sasTokenUri = (string)sasToken["uri"];
+                if (sasTokenUri == null)
+                {
+                    throw new InvalidOperationException(Resources.InvalidBlobResponseFromBroker);
+                }
             }
             catch (MobileServiceInvalidOperationException e)
             {
@@ -79,6 +83,15 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
             req.Content = new StreamContent(fileContents);
             req.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             var putResp = await httpClient.SendAsync(req);
+            try
+            {
+                putResp.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException e)
+            {
+                throw new InvalidOperationException(Resources.InvalidResponseFromStorage, e);
+            }
+
             UriBuilder uriBuilder = new UriBuilder(sasTokenUri);
             uriBuilder.Query = null;
             uriBuilder.Fragment = null;
