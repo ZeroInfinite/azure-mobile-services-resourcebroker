@@ -23,7 +23,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
         [TestCleanup]
         public void TestCleanup()
         {
-            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient();
+            ResourceBrokerStorageClient.HttpClientCreator = () => new HttpClient();
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
                 mobileServiceHandler);
 
             var storageHandler = new TestHttpHandler(HttpStatusCode.Created);
-            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+            ResourceBrokerStorageClient.HttpClientCreator = () => new HttpClient(storageHandler);
 
             var ms = GetBlobContent();
             var url = await client.UploadFileToBlobStorage("container", "file", "text/plain", ms);
@@ -63,7 +63,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
                 mobileServiceHandler);
 
             var storageHandler = new TestHttpHandler(HttpStatusCode.Created);
-            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+            ResourceBrokerStorageClient.HttpClientCreator = () => new HttpClient(storageHandler);
 
             var ms = GetBlobContent();
             var url = await client.UploadFileToBlobStorage("differentBrokerApi", "container", "file", "text/plain", ms);
@@ -81,7 +81,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
                 mobileServiceHandler);
 
             var storageHandler = new TestHttpHandler(HttpStatusCode.Created);
-            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+            ResourceBrokerStorageClient.HttpClientCreator = () => new HttpClient(storageHandler);
 
             var ms = GetBlobContent();
             try
@@ -108,7 +108,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
                 mobileServiceHandler);
 
             var storageHandler = new TestHttpHandler(HttpStatusCode.Created);
-            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+            ResourceBrokerStorageClient.HttpClientCreator = () => new HttpClient(storageHandler);
 
             var ms = GetBlobContent();
             try
@@ -132,7 +132,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
 
             var storageHandler = new TestHttpHandler(HttpStatusCode.InternalServerError);
             storageHandler.SetResponse("An error occurred");
-            ResourceBrokerClientExtensions.HttpClientCreator = () => new HttpClient(storageHandler);
+            ResourceBrokerStorageClient.HttpClientCreator = () => new HttpClient(storageHandler);
 
             var ms = GetBlobContent();
             try

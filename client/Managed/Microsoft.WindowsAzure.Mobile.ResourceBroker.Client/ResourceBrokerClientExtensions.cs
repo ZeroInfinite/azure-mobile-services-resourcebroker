@@ -19,10 +19,15 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
         private const string DefaultBrokerApiName = "resources";
 
         /// <summary>
-        /// Defines how the <see cref="HttpClient"/> that is used to access the storage service
-        /// will be created. Made internal for mocking in the unit test project.
+        /// The <see cref="ResourceBrokerStorageClient"/> which is used to talk to the Azure
+        /// Storage service.
         /// </summary>
-        internal static Func<HttpClient> HttpClientCreator = () => new HttpClient();
+        public static ResourceBrokerStorageClient BrokerStorageClient { get; set; }
+
+        static ResourceBrokerClientExtensions()
+        {
+            BrokerStorageClient = new ResourceBrokerStorageClient();
+        }
 
         /// <summary>
         /// Uploads a file to blob storage via a mobile service with the resource broker configured in
@@ -56,10 +61,10 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
         /// <param name="brokerApiName">The name of the API where the resource broker lives in the service.</param>
         /// <param name="containerName">The name of the container where the blob should be uploaded.</param>
         /// <param name="fileName">The name of the blob.</param>
-        /// <param name="mediaType">The type of data to be stored in the blob.</param>
+        /// <param name="contentType">The type of data to be stored in the blob.</param>
         /// <param name="fileContents">The contents of the blob.</param>
         /// <returns>The URL in the blob storage where the file is stored.</returns>
-        public static async Task<Uri> UploadFileToBlobStorage(this IMobileServiceClient client, string brokerApiName, string containerName, string fileName, string mediaType, Stream fileContents)
+        public static async Task<Uri> UploadFileToBlobStorage(this IMobileServiceClient client, string brokerApiName, string containerName, string fileName, string contentType, Stream fileContents)
         {
             if (client == null)
             {
@@ -81,9 +86,9 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
                 throw new ArgumentNullException("fileName");
             }
 
-            if (string.IsNullOrEmpty(mediaType))
+            if (string.IsNullOrEmpty(contentType))
             {
-                throw new ArgumentNullException("mediaType");
+                throw new ArgumentNullException("contentType");
             }
 
             if (fileContents == null)
@@ -92,7 +97,7 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
             }
 
             string sasTokenUri = await GetBlobSasTokenFromResourceBroker(client, brokerApiName, containerName, fileName);
-            return await UploadContentToBlobStorage(mediaType, fileContents, sasTokenUri);
+            return await BrokerStorageClient.UploadContentToBlobStorage(containerName, fileName, contentType, fileContents, sasTokenUri);
         }
 
         private static async Task<string> GetBlobSasTokenFromResourceBroker(IMobileServiceClient client, string brokerApiName, string containerName, string fileName)
@@ -126,29 +131,6 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client
             }
 
             return sasTokenUri;
-        }
-
-        private static async Task<Uri> UploadContentToBlobStorage(string mediaType, Stream fileContents, string sasTokenUri)
-        {
-            var httpClient = HttpClientCreator();
-            var req = new HttpRequestMessage(HttpMethod.Put, sasTokenUri);
-            req.Headers.Add("x-ms-blob-type", "blockblob");
-            req.Content = new StreamContent(fileContents);
-            req.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
-            var putResp = await httpClient.SendAsync(req);
-            try
-            {
-                putResp.EnsureSuccessStatusCode();
-            }
-            catch (HttpRequestException e)
-            {
-                throw new InvalidOperationException(Resources.InvalidResponseFromStorage, e);
-            }
-
-            UriBuilder uriBuilder = new UriBuilder(sasTokenUri);
-            uriBuilder.Query = null;
-            uriBuilder.Fragment = null;
-            return uriBuilder.Uri;
         }
     }
 }

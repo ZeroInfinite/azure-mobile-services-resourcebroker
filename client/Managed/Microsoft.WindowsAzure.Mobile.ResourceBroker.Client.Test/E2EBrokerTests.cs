@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
 {
@@ -186,6 +186,22 @@ namespace Microsoft.WindowsAzure.Mobile.ResourceBroker.Client.Test
             Assert.IsNotNull(resp.Content);
             var blobContent = await resp.Content.ReadAsByteArrayAsync();
             CollectionAssert.AreEqual(TestImage, blobContent);
+        }
+
+        class AzureResourceBrokerStorageClient : ResourceBrokerStorageClient
+        {
+            public override async Task<Uri> UploadContentToBlobStorage(string containerName, string fileName, string contentType, Stream fileContents, string sasTokenUri)
+            {
+                var storageCredentials = new StorageCredentials(sasTokenUri);
+                var storageAccount = new CloudStorageAccount(storageCredentials, true);
+                var blob = new CloudBlockBlob(null, null);
+                blob.Properties.ContentType = contentType;
+                await blob.UploadFromStreamAsync(fileContents);
+                UriBuilder uriBuilder = new UriBuilder(sasTokenUri);
+                uriBuilder.Query = null;
+                uriBuilder.Fragment = null;
+                return uriBuilder.Uri;
+            }
         }
     }
 }
