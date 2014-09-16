@@ -13,10 +13,17 @@ The ResourceBroker consists of several components:
 To expose a ResourceBroker api from your node Mobile Services back-end, perform the following steps:
 
 ### Installation ###
-Clone your Mobile Service repository and install the npm module in the 'service' folder
+Clone your Mobile Service repository and install the npm module in the 'service' folder. 
 
-    $ npm install mobileservice-resourcebroker
-    
+    $ cd service
+    $ npm install mobileservice-resourcebroker --save
+
+This will update your package.json. Note: if you are running a new version of NPM, you may find that it updated your package.json file with a reference that starts with a '^' e.g. '^0.0.2'. If so, change the '^' to a '~', e.g. `"mobileservice-resourcebroker": "~0.0.2"`.
+
+If this is your first time installing a node module, you will need to make sure you include a .gitignore that ignores your node_modules folder.
+
+Add, commit and push your changes.
+
 ### Get Started ###
 
 Create a new custom api on your Mobile Service called resources from azure cli like so:
